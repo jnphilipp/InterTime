@@ -39,6 +39,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'south',
+	'timetable',
 )
 
 MIDDLEWARE_CLASSES = (
