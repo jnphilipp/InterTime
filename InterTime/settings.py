@@ -110,3 +110,8 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 TEMPLATE_DIRS = (
 	os.path.join(BASE_DIR, 'templates'),
 )
+
+SUIT_CONFIG = {
+	'ADMIN_NAME':'InterTime',
+	'LIST_PER_PAGE': 50,
+}
