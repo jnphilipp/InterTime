@@ -1,0 +1,18 @@
+body {background: #F0F0F0;
+	font-family: monospace;
+	font-size: 10pt;
+	font-weight: normal;
+	color: black;}
+
+a {font-family: monospace;
+	font-weight: bold;
+	color: inherit;
+	text-decoration: none;}
+
+a:hover {color: #0276FD;
+	font-weight: bold;
+	text-decoration: none;}
+
+a:active {position: relative;
+	top: 1px;
+	right: -1px;}
