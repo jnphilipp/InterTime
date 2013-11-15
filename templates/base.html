@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% load admin_urls %}
+
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="{% static "css/style.css" %}" />
+		<title>InterTime</title>
+	</head>
+	<body>
+		<div>
+			{% block header %}{% endblock %}
+		</div>
+		<div id="content">
+			{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>
