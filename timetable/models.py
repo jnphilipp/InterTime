@@ -29,7 +29,7 @@ class Modul(models.Model):
 	name = models.CharField(max_length=1024)
 	lp = models.IntegerField(blank=True, null=True)
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
-	describtion = models.TextField(blank=True, null=True)
+	description = models.TextField(blank=True, null=True)
 	deparment = models.ForeignKey(Deparment, blank=True, null=True)
 
 	def __unicode__(self):
@@ -63,7 +63,10 @@ class Event(models.Model):
 	begin = models.TimeField(blank=True, null=True)
 	end = models.TimeField(blank=True, null=True)
 	weekday = models.IntegerField(blank=True, null=True)
-	instructor = models.ManyToManyField(Instructor)
+	instructors = models.ManyToManyField(Instructor)
+
+	def get_instructors(self):
+		return u", ".join([unicode(instructor) for instructor in self.instructors.all()])
 
 	def __unicode__(self):
 		return self.name
