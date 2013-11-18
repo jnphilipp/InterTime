@@ -1,4 +1,6 @@
-from timetable.models import Modul
+# -*- coding: utf-8 -*-
+
+from timetable.models import Deparment, Modul
 import HTMLParser
 import re
 from urllib2 import urlopen
@@ -14,11 +16,11 @@ class BaseParser(object):
 		text =parser.unescape(html)
 		return text
 
-class IFIWS3(BaseParser):
+class IFIWS13(BaseParser):
 	def fetch(self):
-		html = super(IFIWS3, self).fetch('http://www.informatik.uni-leipzig.de/ifi/studium/stundenplan/ws2013/w13stdgang.html')
+		html = super(IFIWS13, self).fetch('http://www.informatik.uni-leipzig.de/ifi/studium/stundenplan/ws2013/w13stdgang.html')
+		deparment, created = Deparment.objects.get_or_create(name='Institut für Informatik')
 
 		matchs = re.finditer(r'<table.+?s_modul_head.+?<a.+?>(\d[^<>]+?)</a>.+?<b>(.+?)</b>.+?</table>', html, flags=re.M|re.S)
-		print matchs
 		for match in matchs:
-			Modul(number=match.group(1), name=match.group(2))
+			Modul(number=match.group(1), name=match.group(2), deparment=deparment).save()
