@@ -19,7 +19,7 @@ class ModulType(models.Model):
 		return self.name
 
 class Deparment(models.Model):
-	name = models.CharField(max_length=256)
+	name = models.CharField(max_length=256, unique=True)
 
 	def __unicode__(self):
 		return self.name
