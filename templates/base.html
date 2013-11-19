@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html lang="de">
 	<head>
+	<header>
+    {% block toggle_login %}
+        {% include "userauth/toggle_login.html" %}
+    {% endblock %}
+	</header>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="{% static "css/style.css" %}" />
 		<title>InterTime</title>

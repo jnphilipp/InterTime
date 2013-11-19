@@ -40,7 +40,13 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'south',
 	'timetable',
+	'userauth',
 )
+
+
+LOGIN_URL = '/user/anmelden/'
+LOGOUT_URL = '/user/abmelden/'
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = (
 	'django.contrib.sessions.middleware.SessionMiddleware',
