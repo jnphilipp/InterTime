@@ -18,10 +18,10 @@ urlpatterns = patterns('django.contrib.auth.views',
 from django.views.generic import TemplateView
 
 urlpatterns += patterns('',
-    url(r'^registrieren/$', 'userauth.views.register',
+    url(r'^register/$', 'userauth.views.register',
         {'next_page_name': 'userauth_register_done'},
         name='userauth_register'),
-    url(r'^willkommen/$',
+    url(r'^welcome/$',
         TemplateView.as_view(template_name='userauth/register_done.html'),
         name='userauth_register_done')
 )

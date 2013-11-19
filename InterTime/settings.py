@@ -44,8 +44,8 @@ INSTALLED_APPS = (
 )
 
 
-LOGIN_URL = '/user/anmelden/'
-LOGOUT_URL = '/user/abmelden/'
+LOGIN_URL = '/user/login/'
+LOGOUT_URL = '/user/logout/'
 LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = (
