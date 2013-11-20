@@ -49,6 +49,16 @@ class Semester(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class Location(models.Model):
+	building = models.CharField(max_length=256)
+	room = models.CharField(max_length=256)
+
+	def __unicode__(self):
+		return self.name
+
+	class Meta:
+		unique_together = ('building', 'room')			
+
 class EventType(models.Model):
 	name = models.CharField(max_length=256, unique=True)
 
@@ -64,6 +74,7 @@ class Event(models.Model):
 	end = models.TimeField(blank=True, null=True)
 	weekday = models.IntegerField(blank=True, null=True)
 	instructors = models.ManyToManyField(Instructor)
+	location = models.ForeignKey(Location, null=True)
 
 	def get_instructors(self):
 		return u", ".join([unicode(instructor) for instructor in self.instructors.all()])
