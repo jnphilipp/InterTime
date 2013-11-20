@@ -25,7 +25,7 @@ class Deparment(models.Model):
 		return self.name
 
 class Modul(models.Model):
-	number = models.CharField(max_length=256)
+	number = models.CharField(max_length=256, unique=True)
 	name = models.CharField(max_length=1024)
 	lp = models.IntegerField(blank=True, null=True)
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
@@ -44,13 +44,13 @@ class Instructor(models.Model):
 		return self.title + u' ' + self.firstname + u' ' + self.lastname if self.title else self.firstname + u' ' + self.lastname
 
 class Semester(models.Model):
-	name = models.CharField(max_length=256)
+	name = models.CharField(max_length=256, unique=True)
 
 	def __unicode__(self):
 		return self.name
 
 class EventType(models.Model):
-	name = models.CharField(max_length=256)
+	name = models.CharField(max_length=256, unique=True)
 
 	def __unicode__(self):
 		return self.name
