@@ -24,6 +24,10 @@ class Deparment(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class FieldOfStudy(models.Model):
+	name = models.CharField(max_length=256, unique=True)
+	deparment = models.ForeignKey(Deparment)
+
 class Modul(models.Model):
 	number = models.CharField(max_length=256, unique=True)
 	name = models.CharField(max_length=1024)
