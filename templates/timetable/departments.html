@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>Departments</h1>
+{% endblock %}
+
+{% block content %}
+{% if departments %}
+	<ul>
+		{% for department in departments %}
+			<li><a href="{% url 'timetable.views.department_details' department.id %}">{{ department.name}}</a></li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>Keine Module vorhanden.</p>
+{% endif %}
+{% endblock %}

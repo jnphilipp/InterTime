@@ -5,12 +5,13 @@
 <html lang="de">
 	<head>
 	<header>
-    {% block toggle_login %}
-        {% include "userauth/toggle_login.html" %}
+    {% block menubar %}
+        {% include "menubar.html" %}
     {% endblock %}
 	</header>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="{% static "css/style.css" %}" />
+		<link rel="stylesheet" href="{% static "css/menubar.css" %}" />
 		<title>InterTime</title>
 	</head>
 	<body>

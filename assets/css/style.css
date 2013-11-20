@@ -2,7 +2,9 @@ body {background: #F0F0F0;
 	font-family: monospace;
 	font-size: 10pt;
 	font-weight: normal;
-	color: black;}
+	color: black;
+	padding-top:40px;
+}
 
 a {font-family: monospace;
 	font-weight: bold;
@@ -16,3 +18,9 @@ a:hover {color: #0276FD;
 a:active {position: relative;
 	top: 1px;
 	right: -1px;}
+
+
+table.ov{
+	border:solid 1px black;
+}
+td{border:solid 1px black;}

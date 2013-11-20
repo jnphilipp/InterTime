@@ -5,7 +5,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
 	url(r'^$', 'timetable.views.index'),
 	url(r'^user/', include('userauth.urls')),
-	url(r'^timetable/$', 'timetable.views.index'),
+	url(r'^timetable/$', 'timetable.views.moduls'),
 	url(r'^timetable/(?P<modul_id>\d+)/$', 'timetable.views.details', name='blog-post'),
 	url(r'^admin/', include(admin.site.urls)),
+	url(r'^departments/$', 'timetable.views.departments'),
+	url(r'^department/(?P<department_id>\d+)/$', 'timetable.views.department_details', name='blog-post'),
 )
