@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Source(models.Model):
@@ -86,3 +87,12 @@ class Event(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
+class Student(models.Model):
+	user = models.OneToOneField(User)
+	field_of_studies = models.ManyToManyField(FieldOfStudy)
+	current_semester = models.IntegerField()
+
+class Selection(models.Model):
+	student = models.ForeignKey(Student)
+	events = models.ManyToManyField(Event)
