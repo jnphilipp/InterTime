@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>Intertime</h1>
+{% endblock %}
+
+
+{% block content %}
+Welcome to InterTime
+<br><br>
+Modul übersicht:
+<a href="{% url 'timetable.views.moduls' %}">Module</a>
+<br>
+department übersicht:
+<a href="{% url 'timetable.views.departments' %}">Departments</a>
+
+{% endblock %}

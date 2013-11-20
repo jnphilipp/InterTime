@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>{{ department.name }}</h1>
+{% endblock %}
+
+{% block content %}
+<p>Name: {{ department.name }}</p>
+<a href="{% url 'timetable.views.index' %}" style="margin-right: 5em;">zur&uuml;ck</a>
+{% endblock %}

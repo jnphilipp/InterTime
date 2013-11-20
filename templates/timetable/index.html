@@ -7,11 +7,26 @@
 
 {% block content %}
 {% if moduls %}
-	<ul>
+	<table class="ov">
+		<thead>
+			<th>name</th>
+			<th>nummer</th>
+			<th>lp</th>
+			<th>type</th>
+			<th>description</th>
+			<th>department</th>
+		</thead>
 		{% for modul in moduls %}
-			<li><a href="{% url 'timetable.views.details' modul.id %}">{{ modul.name}}</a></li>
+			<tr>
+				<td><a href="{% url 'timetable.views.details' modul.id %}">{{ modul.name}}</a></td>
+				<td>{{ modul.number}}</td>
+				<td>{{ modul.lp}}</td>
+				<td>{{ modul.modultype}}</td>
+				<td>{{ modul.description}}</td>
+				<td>{{ modul.deparment}}</td>
+			</tr>
 		{% endfor %}
-	</ul>
+	</table>
 {% else %}
 	<p>Keine Module vorhanden.</p>
 {% endif %}
