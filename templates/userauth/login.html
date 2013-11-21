@@ -6,6 +6,8 @@
 
 {% block content %}
     <form action="{% url "userauth_login" %}" method="post" accept-charset="utf-8">
+
+         Login:
         {{ form.as_p }}
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />

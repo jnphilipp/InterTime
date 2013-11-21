@@ -1,4 +1,4 @@
-#from django.shortcuts import render
+from django.shortcuts import render
 
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse
@@ -20,6 +20,6 @@ def register(request, template_name='userauth/register.html', next_page_name=Non
     else:
         form = UserCreationForm()
     return render_to_response(template_name, {'form': form},
-        context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 # Create your views here.
