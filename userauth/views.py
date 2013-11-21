@@ -23,5 +23,3 @@ def register(request, template_name='userauth/register.html', next_page_name=Non
                               context_instance=RequestContext(request))
 
 # Create your views here.
-def plan(request):
-    return render(request, 'plan.html')

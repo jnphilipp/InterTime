@@ -24,5 +24,5 @@ urlpatterns += django.conf.urls.patterns('',
     django.conf.urls.url(r'^welcome/$',
         TemplateView.as_view(template_name='userauth/register_done.html'),
         name='userauth_register_done'),
-    django.conf.urls.url(r'^plan/$', TemplateView.as_view(template_name='userauth/plan.html'),name= 'user_plan')
+    
 )

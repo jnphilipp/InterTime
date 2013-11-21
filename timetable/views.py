@@ -26,4 +26,5 @@ def department_details(request, department_id):
     department = get_object_or_404(Deparment, pk=department_id)
     return render(request, 'timetable/department_details.html', {'department': department})
 
-
+def plan(request):
+    return render(request, 'timetable/plan.html')
