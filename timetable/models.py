@@ -29,6 +29,16 @@ class FieldOfStudy(models.Model):
 	name = models.CharField(max_length=256, unique=True)
 	deparment = models.ForeignKey(Deparment)
 
+	def __unicode__(self):
+		return self.name
+
+class ModulFieldOfStudy(models.Model):
+	field_of_study = models.ForeignKey(FieldOfStudy)
+	semester_numbers = models.CommaSeparatedIntegerField(max_length=256, null=True)
+
+	def __unicode__(self):
+		return unicode(self.field_of_study)
+
 class Modul(models.Model):
 	number = models.CharField(max_length=256, unique=True)
 	name = models.CharField(max_length=1024)
@@ -36,6 +46,7 @@ class Modul(models.Model):
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
 	description = models.TextField(blank=True, null=True)
 	deparment = models.ForeignKey(Deparment, blank=True, null=True)
+	field = models.ForeignKey(ModulFieldOfStudy, null=True)
 
 	def __unicode__(self):
 		return self.name
@@ -80,7 +91,6 @@ class Event(models.Model):
 	weekday = models.IntegerField(blank=True, null=True)
 	instructors = models.ManyToManyField(Instructor)
 	location = models.ForeignKey(Location, null=True)
-	semester_numbers = models.CommaSeparatedIntegerField(max_length=256, null=True)
 
 	def get_instructors(self):
 		return u", ".join([unicode(instructor) for instructor in self.instructors.all()])
