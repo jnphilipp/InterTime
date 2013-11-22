@@ -116,7 +116,7 @@ class EventAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None, {'fields': ['name', 'eventtype', 'modul']}),
 		('Course informations', {'fields': ['semester_numbers']}),
-		('Time', {'fields': ['weekday', 'weeknumber, 'begin', 'end', 'semester', 'location']}),
+		('Time', {'fields': ['weekday', 'weeknumber', 'begin', 'end', 'semester', 'location']}),
 		('Instructors', {'fields': ['instructors']}),
 	]
 
