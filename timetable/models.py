@@ -46,7 +46,7 @@ class Modul(models.Model):
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
 	description = models.TextField(blank=True, null=True)
 	deparment = models.ForeignKey(Deparment, blank=True, null=True)
-	field = models.ForeignKey(ModulFieldOfStudy, null=True)
+	fields = models.ManyToManyField(ModulFieldOfStudy, null=True)
 
 	def __unicode__(self):
 		return self.name
