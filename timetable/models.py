@@ -89,7 +89,7 @@ class Event(models.Model):
 	begin = models.TimeField(blank=True, null=True)
 	end = models.TimeField(blank=True, null=True)
 	weekday = models.IntegerField(blank=True, null=True)
-	weeknumber = models.BooleanField(blank=True, default=False)
+	weeknumber = models.CharField(max_length=256, blank=True, default=False)
 	instructors = models.ManyToManyField(Instructor)
 	location = models.ForeignKey(Location, null=True)
 
