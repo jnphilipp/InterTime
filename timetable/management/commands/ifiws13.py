@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from timetable.models import Modul
+from timetable.models import Event, Modul
 from timetable.parser.parsers import IFIWS13
 
 class Command(BaseCommand):
@@ -7,8 +7,11 @@ class Command(BaseCommand):
 	help = 'Runs the IFIWS13 parser.'
 
 	def handle(self, *args, **options):
-		count = Modul.objects.count()
+		moduls = Modul.objects.count()
+		events = Event.objects.count()
 		ifiws13 = IFIWS13()
 		ifiws13.fetch()
-		ncount = Modul.objects.count()
-		self.stdout.write('Added ' + str(ncount - count) + ' Module')
+		moduls = Modul.objects.count() - moduls
+		events = Event.objects.count() - events
+		self.stdout.write('Added ' + str(moduls) + ' Module')
+		self.stdout.write('Added ' + str(events) + ' Events')
