@@ -70,7 +70,7 @@ class Location(models.Model):
 	room = models.CharField(max_length=256)
 
 	def __unicode__(self):
-		return self.building + u', ' + self.room
+		return self.building + u', ' + self.room if self.building else self.room
 
 	class Meta:
 		unique_together = ('building', 'room')
@@ -89,7 +89,7 @@ class Event(models.Model):
 	begin = models.TimeField(blank=True, null=True)
 	end = models.TimeField(blank=True, null=True)
 	weekday = models.IntegerField(blank=True, null=True)
-	weeknumber = models.CharField(max_length=256, blank=True, default=False)
+	weeknumber = models.CharField(max_length=256, blank=True, null=True)
 	instructors = models.ManyToManyField(Instructor)
 	location = models.ForeignKey(Location, null=True)
 
