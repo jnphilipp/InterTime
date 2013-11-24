@@ -6,5 +6,117 @@
 
 {% block content %}
         <font size="+2">Semesterplan</font><br>
+        <h3>select semester</h3>
+        <select id="select_semester">
+        	<option value="5">choose one</option>
+        	<option value="0">Sommersemester</option>
+        	<option value="1">Wintersemester</option>
+        </select>
+        <hr>
+        <h3> selected moduls</h3>
+        <table id="selected">
+                <thead>
+                        <th>select</th>
+                        <th>name</th>
+                        <th>nummer</th>
+                        <th>lp</th>
+                        <th>type</th>
+                        <th>description</th>
+                        <th>events</th>
+                </thead>
+                <tbody id="selected_body">
+                </tbody>
+        </table>
 
+        <br /><hr><br />
+
+        <h3>avaiable moduls</h3>
+        <table id="offering">
+        	<thead>
+                        <th>select</th>
+                        <th>name</th>
+			<th>nummer</th>
+			<th>lp</th>
+			<th>type</th>
+			<th>description</th>
+                        <th>events</th>
+        	</thead>
+        	<tbody id="offer_body">
+        		{% if ss_moduls %}
+                        {% for modul in ss_moduls %}
+                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                        <td><input type="button" value="+"></td>
+                                        <td>{{ modul.name}}</td>
+                                        <td>{{ modul.number}}</td>
+                                        <td>{{ modul.lp}}</td>
+                                        <td>{{ modul.modultype}}</td>
+                                        <td>{{ modul.description}}</td>
+                                        <td></td>
+                                </tr>
+                        {% endfor %}
+                        {% else %}
+                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                        <td colspan="7"> no moduls avaiable</td>
+                                </tr>
+                        {% endif %}
+
+                        {% if ws_moduls %}
+                        {% for modul in ws_moduls %}
+                                <tr class="offer_ws" id="{{ modul.number}}" style="display:none;">
+                                        <td><input type="button" value="+" name="{{ modul.number}}" class="btn_sel"></td>
+                                        <td>{{ modul.name}}</td>
+                                        <td>{{ modul.number}}</td>
+                                        <td>{{ modul.lp}}</td>
+                                        <td>{{ modul.modultype}}</td>
+                                        <td>{{ modul.description}}</td>
+                                        <td>    
+ 
+                                        </td>
+                                </tr>
+                        {% endfor %}
+                        {% else %}
+                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                        <td colspan="7"> no moduls avaiable</td>
+                                </tr>
+                        {% endif %}
+                        
+
+        	</tbody>
+        </table>
+        <script>
+        
+        	$('#select_semester').change(function (){
+        		if($(this).val() !=5){
+        			if($(this).val()==0){
+        		              $('.offer_ss').css("display","table-row");
+                                      $('.offer_ws').css("display","none");
+        			}
+        			else if($(this).val()==1){
+                                      $('.offer_ws').css("display","table-row");
+                                      $('.offer_ss').css("display","none");
+        			}	
+        		}
+        	});
+        
+                $('.btn_sel').click(function(){
+                        $(this).val("-");
+                        $(this).removeClass('btn_sel');
+                        $(this).addClass('btn_desel');
+                        var name='#'+$(this).attr('name');
+                        $('#selected_body').append( $(name));
+                        
+
+
+                        $('.btn_desel').click(function(){
+                                $(this).removeClass('btn_desel');
+                                $(this).addClass('btn_sel');
+                                $(this).val("+");
+                                var name='#'+$(this).attr('name');
+                                $('#offer_body').append($(name));
+                        
+                        });
+                });
+                
+
+	</script>
 {% endblock %}
