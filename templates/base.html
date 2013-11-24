@@ -4,11 +4,6 @@
 <!DOCTYPE html>
 <html lang="de">
 	<head>
-	<header>
-    {% block menubar %}
-        {% include "menubar.html" %}
-    {% endblock %}
-	</header>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="{% static "css/style.css" %}" />
 		<link rel="stylesheet" href="{% static "css/menubar.css" %}" />
@@ -16,7 +11,12 @@
 		<title>InterTime</title>
 	</head>
 	<body>
-		<div>
+		<header>
+			{% block menubar %}
+				{% include "menubar.html" %}
+			{% endblock %}
+		</header>
+		<div style="margin-top: 3em;">
 			{% block header %}{% endblock %}
 		</div>
 		<div id="content">

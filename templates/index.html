@@ -6,14 +6,12 @@
 
 
 {% block content %}
-Welcome to InterTime
-<br><br>
-Modul übersicht:
-<a href="{% url 'timetable.views.moduls' %}">Module</a>
-<br>
-department übersicht:
-<a href="{% url 'timetable.views.departments' %}">Departments</a>
-<br>
-Stundenplan:
-<a href="{% url 'timetable.views.plan' %}">Semesterplan</a>
+<p>Welcome to InterTime</p>
+<p>
+	<ul style="list-style:none;">
+		<li>Modul overview: <a href="{% url 'timetable.views.moduls' %}">Module</a></li>
+		<li>Department overview: <a href="{% url 'timetable.views.departments' %}">Departments</a></li>
+		<li>Create timetable: <a href="{% url 'timetable.views.plan' %}">Semesterplan</a></li>
+	</ul>
+</p>
 {% endblock %}
