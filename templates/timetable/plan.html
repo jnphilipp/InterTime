@@ -44,43 +44,50 @@
         	<tbody id="offer_body">
         		{% if ss_moduls %}
                         {% for modul in ss_moduls %}
-                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                <tr class="offer_ss offer" id="{{ modul.number}}">
                                         <td><input type="button" value="+"></td>
                                         <td>{{ modul.name}}</td>
                                         <td>{{ modul.number}}</td>
                                         <td>{{ modul.lp}}</td>
                                         <td>{{ modul.modultype}}</td>
                                         <td>{{ modul.description}}</td>
-                                        <td></td>
+                                        <td class="offer_events" id="{{ modul.number}}_events">
+                                                {% for m in modul.event_set.all %}
+                                                        {{m}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                {% endfor %}
+                                        </td></td>
                                 </tr>
                         {% endfor %}
                         {% else %}
-                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                <tr class="offer_ss offer" id="{{ modul.number}}">
                                         <td colspan="7"> no moduls avaiable</td>
                                 </tr>
                         {% endif %}
 
+
                         {% if ws_moduls %}
-                        {% for modul in ws_moduls %}
-                                <tr class="offer_ws" id="{{ modul.number}}" style="display:none;">
+                        {% for modul in ws_moduls.distinct %}
+                                <tr class="offer_ws offer" id="{{ modul.number}}" >
                                         <td><input type="button" value="+" name="{{ modul.number}}" class="btn_sel"></td>
                                         <td>{{ modul.name}}</td>
                                         <td>{{ modul.number}}</td>
                                         <td>{{ modul.lp}}</td>
                                         <td>{{ modul.modultype}}</td>
                                         <td>{{ modul.description}}</td>
-                                        <td>    
- 
+                                        <td class="offer_events" id="{{ modul.number}}_events">
+                                                        {% for m in modul.event_set.all %}
+                                                                {{m}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                        {% endfor %}
                                         </td>
                                 </tr>
                         {% endfor %}
                         {% else %}
-                                <tr class="offer_ss" id="{{ modul.number}}" style="display:none;">
+                                <tr class="offer_ss offer" id="{{ modul.number }}">
                                         <td colspan="7"> no moduls avaiable</td>
                                 </tr>
                         {% endif %}
-                        
 
+                        
         	</tbody>
         </table>
         <script>
@@ -104,7 +111,7 @@
                         $(this).addClass('btn_desel');
                         var name='#'+$(this).attr('name');
                         $('#selected_body').append( $(name));
-                        
+                        $(name+'_events').css("display","table-row");
 
 
                         $('.btn_desel').click(function(){
@@ -113,6 +120,7 @@
                                 $(this).val("+");
                                 var name='#'+$(this).attr('name');
                                 $('#offer_body').append($(name));
+                                $(name+'_events').css("display","none");
                         
                         });
                 });
