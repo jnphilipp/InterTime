@@ -29,4 +29,7 @@ table.ov{	border:solid 1px black;}
 td{border:solid 1px black;}
 
 .offer{	display:none;}
-.offer_events{	display:none;}
+.offer_events{	
+	display:none;
+	color:green;
+	}

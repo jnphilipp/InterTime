@@ -30,7 +30,7 @@
 
         <br /><hr><br />
 
-        <h3>avaiable moduls</h3>
+        <h3>available moduls</h3>
         <table id="offering">
         	<thead>
                         <th>select</th>
@@ -39,7 +39,6 @@
 			<th>lp</th>
 			<th>type</th>
 			<th>description</th>
-                        <th>events</th>
         	</thead>
         	<tbody id="offer_body">
         		{% if ss_moduls %}
@@ -53,7 +52,9 @@
                                         <td>{{ modul.description}}</td>
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
-                                                        {{m}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                        <span id="{{m.id}}" class="offer:event">
+                                                                {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                        </span>
                                                 {% endfor %}
                                         </td></td>
                                 </tr>
@@ -75,9 +76,11 @@
                                         <td>{{ modul.modultype}}</td>
                                         <td>{{ modul.description}}</td>
                                         <td class="offer_events" id="{{ modul.number}}_events">
-                                                        {% for m in modul.event_set.all %}
-                                                                {{m}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
-                                                        {% endfor %}
+                                                {% for m in modul.event_set.all %}
+                                                        <span id="{{m.id}}" class="offer:event">
+                                                                {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                        </span>
+                                                {% endfor %}
                                         </td>
                                 </tr>
                         {% endfor %}
