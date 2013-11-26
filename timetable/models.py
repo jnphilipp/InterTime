@@ -40,7 +40,7 @@ class ModulFieldOfStudy(models.Model):
 		return unicode(self.field_of_study)
 
 class Modul(models.Model):
-	number = models.CharField(max_length=256, unique=True)
+	number = models.CharField(max_length=256, unique=True, null=True)
 	name = models.CharField(max_length=1024)
 	lp = models.IntegerField(blank=True, null=True)
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
