@@ -21,6 +21,6 @@ def department_details(request, department_id):
 	return render(request, 'timetable/department_details.html', {'department': department})
 
 def plan(request):
-	ws_moduls = Modul.objects.all().order_by('number').filter(event__semester__exact='1').values('number','name','lp','modultype','description').distinct()
+	ws_moduls = Modul.objects.all().order_by('number').filter(event__semester__exact='1')
 	ss_moduls = Modul.objects.all().order_by('number').filter(event__semester__exact='0')
 	return render(request, 'timetable/plan.html',{'ws_moduls': ws_moduls,'ss_moduls': ss_moduls})
