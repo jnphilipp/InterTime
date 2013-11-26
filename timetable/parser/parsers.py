@@ -27,14 +27,14 @@ class IFIWS13(BaseParser):
 
 		matchs = re.finditer(r'<!--###s_modul### begin -->(.+?)(?=<!--###s_modul### end -->)', html, flags=re.M|re.S)
 		for match in matchs:
-			moduls = []
-			instructors = []
+			moduls = set()
+			instructors = set()
 			header = re.search(r'<table class="full border s_modul_head">(.+?)(?=</table>)', match.group(1), flags=re.M|re.S)
 			if header:
 				ms = re.finditer(r'name="(\d.+?)">', header.group(1), flags=re.M|re.S)
-				numbers = []
+				numbers = set()
 				for m in ms:
-					numbers.append(m.group(1))
+					numbers.add(m.group(1))
 
 				m = re.search('<td align="center"><b>(.+?)</b>', header.group(1), flags=re.M|re.S)
 				if m:
@@ -42,11 +42,11 @@ class IFIWS13(BaseParser):
 
 				for number in numbers:
 					modul, created = Modul.objects.get_or_create(number=number)
-					if not created:
+					if created:
 						modul.name = name
 						modul.deparment = deparment
 						modul.save()
-						moduls.append(modul)
+					moduls.add(modul)
 
 				if not len(moduls) > 0:
 					continue
@@ -54,7 +54,7 @@ class IFIWS13(BaseParser):
 				ms = re.finditer(r'<a href="studium/stundenplan/ws2013/w13dozent.html#.+?>(.+?),(.+?)</a>', header.group(1), flags=re.M|re.S)
 				for m in ms:
 					instructor, created = Instructor.objects.get_or_create(firstname=m.group(2), lastname=m.group(1))
-					instructors.append(instructor)
+					instructors.add(instructor)
 
 				m = re.search(r'href="studium/stundenplan/ws2013/w13stdgang.html#.+?">(.+?)</a>', header.group(1), flags=re.M|re.S)
 				if m:
@@ -73,7 +73,7 @@ class IFIWS13(BaseParser):
 				if mm:
 					eventname = mm.group(1)
 
-				events = re.finditer(r'<table class="full">.*?(?=<table class="full">)', m.group(0), flags=re.M|re.S)
+				events = re.finditer(r'<table class="full">.*?(?=</table>)', m.group(0), flags=re.M|re.S)
 				for e in events:
 					mm = re.search(r'<td class="s_termin_typ">([^<]*)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
@@ -86,7 +86,10 @@ class IFIWS13(BaseParser):
 						event_end = mm.group(1)
 					mm = re.search(r'<td class="s_termin_zeit">([^ <]+)\s?\(?([^<\)]+)?</td>', e.group(0), flags=re.M|re.S)
 					if mm:
-						event_weekday = self.weekdays.index(mm.group(1))
+						try:
+							event_weekday = self.weekdays.index(mm.group(1))
+						except:
+							event_weekday = None
 						event_weekday2 = mm.group(2)
 					mm = re.search(r'<td class="s_termin_raum">([^<,]+),?\s?([^<]+)?</td>', e.group(0), flags=re.M|re.S)
 					if mm:
@@ -94,13 +97,20 @@ class IFIWS13(BaseParser):
 							location, created = Location.objects.get_or_create(room=mm.group(1))
 						else:
 							location, created = Location.objects.get_or_create(room=mm.group(2), building=mm.group(1))
-					mm = re.search(r'<td class="s_termin_dozent"><a[^>]+>([^,]+), ([^<]+)</a></td>', e.group(0), flags=re.M|re.S)
+
+					event_instructors = set()
+					mm = re.search(r'<td class="s_termin_dozent">(.+?)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
-						event_instructor, created = Instructor.objects.get_or_create(firstname=mm.group(2), lastname=mm.group(1))
+						mms = re.finditer(r'<a href="studium/stundenplan/ws2013/w13dozent.html#[^>]+>([^,]+), ([^<]+)</a>', mm.group(1), flags=re.M|re.S)
+						for mmm in mms:
+							event_instructor, created = Instructor.objects.get_or_create(firstname=mmm.group(2), lastname=mmm.group(1))
+							event_instructors.add(event_instructor)
 
 					for modul in moduls:
-						event = Event(name=eventname, modul=modul, semester=semester, eventtype=eventtype, begin=event_begin, end=event_end, location=location, weekday=event_weekday, weeknumber=event_weekday2)
-						event.save()
-						for instructor in instructors:
-							event.instructors.add(instructor)
-						event.instructors.add(event_instructor)
+						(event, created) = Event.objects.get_or_create(name=eventname, modul=modul, semester=semester, eventtype=eventtype, begin=event_begin, end=event_end, location=location, weekday=event_weekday, weeknumber=event_weekday2)
+
+						if created:
+							event_instructors.union(instructors)
+							for instructor in event_instructors:
+								event.instructors.add(instructor)
+							event.save()
