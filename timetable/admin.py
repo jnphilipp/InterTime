@@ -40,6 +40,7 @@ class DeparmentAdmin(admin.ModelAdmin):
 
 class ModulAdmin(admin.ModelAdmin):
 	list_display = ('number', 'name',)
+	list_filter = ('fields',)
 	search_fields = ('number', 'name')
 
 	formfield_overrides = {
@@ -106,6 +107,7 @@ class LocationAdmin(admin.ModelAdmin):
 
 class EventAdmin(admin.ModelAdmin):
 	list_display = ('name', 'modul', 'semester', 'get_instructors')
+	list_filter = ('semester',)
 	search_fields = ('name', 'modul')
 	ordering = ('name', 'modul')
 
