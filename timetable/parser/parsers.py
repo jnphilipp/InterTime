@@ -31,19 +31,27 @@ class IFIWS13(BaseParser):
 			instructors = set()
 			header = re.search(r'<table class="full border s_modul_head">(.+?)(?=</table>)', match.group(1), flags=re.M|re.S)
 			if header:
-				ms = re.finditer(r'name="(\d.+?)">', header.group(1), flags=re.M|re.S)
+				ms = re.finditer(r'name="(\d[^"]+?)">', header.group(1), flags=re.M|re.S)
 				numbers = set()
 				for m in ms:
 					numbers.add(m.group(1))
 
-				m = re.search('<td align="center"><b>(.+?)</b>', header.group(1), flags=re.M|re.S)
+				name = ''
+				m = re.search('<td align="center">(<a[^>]+>)?<b>(.+?)</b>', header.group(1), flags=re.M|re.S)
 				if m:
-					name = m.group(1)
+					name = m.group(2)
 
 				for number in numbers:
 					modul, created = Modul.objects.get_or_create(number=number)
 					if created:
 						modul.name = name
+						modul.deparment = deparment
+						modul.save()
+					moduls.add(modul)
+
+				if len(numbers) == 0:
+					modul, created = Modul.objects.get_or_create(number=None, name=name)
+					if created:
 						modul.deparment = deparment
 						modul.save()
 					moduls.add(modul)
