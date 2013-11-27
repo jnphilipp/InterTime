@@ -5,6 +5,11 @@
 {% block toggle_login %}{% endblock %}
 
 {% block content %}
+        <script> 
+                var module= {mods:[ 
+                                {}, 
+                         ]};
+        </script>
         <font size="+2">Semesterplan</font><br>
         <h3>select semester</h3>
         <select id="select_semester">
@@ -52,7 +57,7 @@
                                         <td>{{ modul.description}}</td>
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
-                                                        <span id="{{m.id}}" class="offer:event">
+                                                        <span id="{{m.id}}" class="offer_event" name="{{ m.weekday }} || {{m.id}} || {{m.eventtype}} || {{ m.begin }} || {{ m.end }}">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
@@ -60,7 +65,7 @@
                                 </tr>
                         {% endfor %}
                         {% else %}
-                                <tr class="offer_ss offer" id="{{ modul.number}}">
+                                <tr class="offer_ss offer" >
                                         <td colspan="7"> no moduls avaiable</td>
                                 </tr>
                         {% endif %}
@@ -68,8 +73,11 @@
 
                         {% if ws_moduls %}
                         {% for modul in ws_moduls.distinct %}
+                                <script>
+                                        var mod = {number:"{{ modul.number}}",events:[]};
+                                </script>
                                 <tr class="offer_ws offer" id="{{ modul.number}}" >
-                                        <td><input type="button" value="+" name="{{ modul.number}}" class="btn_sel"></td>
+                                        <td><input type="button" value="+" name="{{ modul.number }}" class="btn_sel"></td>
                                         <td>{{ modul.name}}</td>
                                         <td>{{ modul.number}}</td>
                                         <td>{{ modul.lp}}</td>
@@ -77,15 +85,22 @@
                                         <td>{{ modul.description}}</td>
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
-                                                        <span id="{{m.id}}" class="offer:event">
+                                                        <script>
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}"};
+                                                                mod.events.push(evt);
+                                                        </script>
+                                                        <span id="{{m.id}}" class="offer_event">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
                                         </td>
                                 </tr>
+                                <script>
+                                        module.mods.push(mod);
+                                </script>
                         {% endfor %}
                         {% else %}
-                                <tr class="offer_ss offer" id="{{ modul.number }}">
+                                <tr class="offer_ss offer" >
                                         <td colspan="7"> no moduls avaiable</td>
                                 </tr>
                         {% endif %}
@@ -94,7 +109,17 @@
         	</tbody>
         </table>
         <script>
-        
+                var week= {day:[ 
+                                {id:"0", events:[] }, 
+                                {id:"1", events:[] }, 
+                                {id:"2", events:[] }, 
+                                {id:"3", events:[] }, 
+                                {id:"4", events:[] }, 
+                                {id:"5", events:[] }, 
+                                {id:"6", events:[] }, 
+                                {id:"7", events:[] }, 
+                         ]};
+
         	$('#select_semester').change(function (){
         		if($(this).val() !=5){
         			if($(this).val()==0){
@@ -116,6 +141,17 @@
                         $('#selected_body').append( $(name));
                         $(name+'_events').css("display","table-row");
 
+                        for(var i in module.mods)
+                        {
+                                if(module.mods[i].number == $(this).attr("name"))
+                                {alert("selected:"+module.mods[i].number);
+                                        for(var j in module.mods[i].events)
+                                        {
+                                               week.day[ module.mods[i].events[j].day ].events.push(module.mods[i].events[j]);
+                                        }
+                                        
+                                }
+                        }
 
                         $('.btn_desel').click(function(){
                                 $(this).removeClass('btn_desel');
@@ -124,8 +160,27 @@
                                 var name='#'+$(this).attr('name');
                                 $('#offer_body').append($(name));
                                 $(name+'_events').css("display","none");
-                        
+                                 
+                                for(var i in week.day)
+                                {       
+                                        for(var j in week.day[i].events)
+                                        {
+                                                alert("remove"+week.day[i].events[j].modul);
+                                                delete week.day[i].events[j];
+
+                                        }
+                                }
                         });
+
+                        //$("span."+$(this).attr("name")).css('color','yellow');
+                        
+                        //alert(module.mods[1].events[0].type);
+                                              
+                         //var evt={name:"6",from:"12"};
+                         //week.day[2].events.push(evt);
+
+                        //alert(week.day[1].events[0].from);
+
                 });
                 
 
