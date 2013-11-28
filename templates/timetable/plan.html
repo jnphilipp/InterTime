@@ -77,7 +77,10 @@
                                         var mod = {number:"{{ modul.number}}",events:[]};
                                 </script>
                                 <tr class="offer_ws offer" id="{{ modul.number}}" >
-                                        <td><input type="button" value="+" name="{{ modul.number }}" class="btn_sel"></td>
+                                        <td>
+                                                <input type="button" value="+" name="{{ modul.number }}" class="btn_sel" id="{{ modul.number }}_btn_sel">
+                                                <input type="button" value="-" name="{{ modul.number }}" class="btn_desel" id="{{ modul.number }}_btn_desel" style="display:none;">
+                                        </td>
                                         <td>{{ modul.name}}</td>
                                         <td>{{ modul.number}}</td>
                                         <td>{{ modul.lp}}</td>
@@ -134,9 +137,8 @@
         	});
         
                 $('.btn_sel').click(function(){
-                        $(this).val("-");
-                        $(this).removeClass('btn_sel');
-                        $(this).addClass('btn_desel');
+                        $(this).css("display","none");
+                        $('#'+$(this).attr('name')+"_btn_desel").css("display","table-row");
                         var name='#'+$(this).attr('name');
                         $('#selected_body').append( $(name));
                         $(name+'_events').css("display","table-row");
@@ -154,9 +156,8 @@
                         }
 
                         $('.btn_desel').click(function(){
-                                $(this).removeClass('btn_desel');
-                                $(this).addClass('btn_sel');
-                                $(this).val("+");
+                                $(this).css("display","none");
+                                $('#'+$(this).attr('name')+"_btn_sel").css("display","table-row");
                                 var name='#'+$(this).attr('name');
                                 $('#offer_body').append($(name));
                                 $(name+'_events').css("display","none");
@@ -167,6 +168,7 @@
                                         {
                                                 alert("remove"+week.day[i].events[j].modul);
                                                 delete week.day[i].events[j];
+                                                //week.day[i].events.delete(week.day[i].events[j]);
 
                                         }
                                 }
