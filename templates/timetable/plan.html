@@ -34,6 +34,10 @@
         </table>
 
         <br /><hr><br />
+        testoutput: <input type="button" id="test_out_btn" value="do it">
+        <div id="test_out"></div>
+
+        <br /><hr><br />
 
         <h3>available moduls</h3>
         <table id="offering">
@@ -146,33 +150,13 @@
                         for(var i in module.mods)
                         {
                                 if(module.mods[i].number == $(this).attr("name"))
-                                {alert("selected:"+module.mods[i].number);
+                                {
                                         for(var j in module.mods[i].events)
                                         {
                                                week.day[ module.mods[i].events[j].day ].events.push(module.mods[i].events[j]);
                                         }
-                                        
                                 }
                         }
-
-                        $('.btn_desel').click(function(){
-                                $(this).css("display","none");
-                                $('#'+$(this).attr('name')+"_btn_sel").css("display","table-row");
-                                var name='#'+$(this).attr('name');
-                                $('#offer_body').append($(name));
-                                $(name+'_events').css("display","none");
-                                 
-                                for(var i in week.day)
-                                {       
-                                        for(var j in week.day[i].events)
-                                        {
-                                                alert("remove"+week.day[i].events[j].modul);
-                                                delete week.day[i].events[j];
-                                                //week.day[i].events.delete(week.day[i].events[j]);
-
-                                        }
-                                }
-                        });
 
                         //$("span."+$(this).attr("name")).css('color','yellow');
                         
@@ -184,7 +168,38 @@
                         //alert(week.day[1].events[0].from);
 
                 });
+
+                $('.btn_desel').click(function(){
+                        $(this).css("display","none");
+                        $('#'+$(this).attr('name')+"_btn_sel").css("display","table-row");
+                        var name='#'+$(this).attr('name');
+                        $('#offer_body').append($(name));
+                        $(name+'_events').css("display","none");                 
+                        for(var i in week.day)
+                        {       
+                                for( var j=week.day[i].events.length-1;j>=0;j--)
+                                {
+                                        if(week.day[i].events[j].modul == $(this).attr('name'))
+                                        {
+                                                week.day[i].events.splice(j,1);
+                                                j=week.day[i].events.length-1;
+                                        }//else{alert(week.day[i].events[j].modul+'== '+$(this).attr('name'));}
+                                }
+                        }
+                });
                 
+                $('#test_out_btn').click(function(){
+                        for(var i in week.day)
+                        {       
+                                $('#test_out').append("day "+i+":"+'<br />');
+                                for(var j in week.day[i].events)
+                                {
+                                        $('#test_out').append( week.day[i].events[j].modul+":"+week.day[i].events[j].type
+                                                +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to
+                                                +'<br />');
+                                }
+                        }
+                });
 
 	</script>
 {% endblock %}
