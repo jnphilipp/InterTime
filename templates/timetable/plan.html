@@ -51,9 +51,15 @@
         	</thead>
         	<tbody id="offer_body">
         		{% if ss_moduls %}
-                        {% for modul in ss_moduls %}
+                        {% for modul in ss_moduls.distinct %}
+                                <script>
+                                        var mod = {number:"{{ modul.number}}",events:[]};
+                                </script>
                                 <tr class="offer_ss offer" id="{{ modul.number}}">
-                                        <td><input type="button" value="+"></td>
+                                        <td>
+                                                <input type="button" value="+" name="{{ modul.number }}" class="btn_sel" id="{{ modul.number }}_btn_sel">
+                                                <input type="button" value="-" name="{{ modul.number }}" class="btn_desel" id="{{ modul.number }}_btn_desel" style="display:none;">
+                                        </td>
                                         <td>{{ modul.name}}</td>
                                         <td>{{ modul.number}}</td>
                                         <td>{{ modul.lp}}</td>
@@ -61,12 +67,19 @@
                                         <td>{{ modul.description}}</td>
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
-                                                        <span id="{{m.id}}" class="offer_event" name="{{ m.weekday }} || {{m.id}} || {{m.eventtype}} || {{ m.begin }} || {{ m.end }}">
+                                                        <script>
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ss",id:"{{ m.id }}"};
+                                                                mod.events.push(evt);
+                                                        </script>
+                                                        <span id="{{m.id}}" class="offer_event">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
                                         </td></td>
                                 </tr>
+                                <script>
+                                        module.mods.push(mod);
+                                </script>
                         {% endfor %}
                         {% else %}
                                 <tr class="offer_ss offer" >
@@ -93,10 +106,10 @@
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
                                                         <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}"};
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws",id:"{{ m.id }}"};
                                                                 mod.events.push(evt);
                                                         </script>
-                                                        <span id="{{m.id}}" class="offer_event">
+                                                        <span class="{{m.id}}" class="offer_event">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
@@ -157,16 +170,7 @@
                                         }
                                 }
                         }
-
-                        //$("span."+$(this).attr("name")).css('color','yellow');
-                        
-                        //alert(module.mods[1].events[0].type);
-                                              
-                         //var evt={name:"6",from:"12"};
-                         //week.day[2].events.push(evt);
-
-                        //alert(week.day[1].events[0].from);
-
+                        checkOverLeap();
                 });
 
                 $('.btn_desel').click(function(){
@@ -182,24 +186,57 @@
                                         if(week.day[i].events[j].modul == $(this).attr('name'))
                                         {
                                                 week.day[i].events.splice(j,1);
-                                                j=week.day[i].events.length-1;
-                                        }//else{alert(week.day[i].events[j].modul+'== '+$(this).attr('name'));}
+                                                j=week.day[i].events.length;
+                                        }
                                 }
                         }
+                        checkOverLeap();
                 });
                 
-                $('#test_out_btn').click(function(){
+                
+                $('#test_out_btn').click(function(){checkOverLeap();
                         for(var i in week.day)
                         {       
                                 $('#test_out').append("day "+i+":"+'<br />');
                                 for(var j in week.day[i].events)
                                 {
                                         $('#test_out').append( week.day[i].events[j].modul+":"+week.day[i].events[j].type
-                                                +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to
+                                                +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to+"("+week.day[i].events[j].flag+")"+week.day[i].events[j].semester
                                                 +'<br />');
                                 }
                         }
                 });
 
+                function checkOverLeap()
+                {
+                        for(var i in week.day)
+                        {       
+                                for( var j=0;j<week.day[i].events.length-1;j++)
+                                { 
+                                        week.day[i].events[j].flag="true";
+                                        $("span."+week.day[i].events[j].id).css('color','green');
+                                }
+
+                                for( var j=0;j<week.day[i].events.length-2;j++)
+                                {       
+                                        for( var k=j+1;k<week.day[i].events.length-1;k++)
+                                        {
+                                                if(week.day[i].events[j].semester == week.day[i].events[k].semester && (
+                                                        week.day[i].events[j].from > week.day[i].events[k].to 
+                                                        ||  week.day[i].events[j].to < week.day[i].events[k].from ))
+                                                {
+                                                }
+                                                else
+                                                {
+                                                     week.day[i].events[j].flag="false";
+                                                     week.day[i].events[k].flag="false";
+                                                     $("span."+week.day[i].events[j].id).css('color','yellow');
+                                                     $("span."+week.day[i].events[k].id).css('color','yellow');
+                                                }
+                                        }
+                                }
+
+                        }
+                }
 	</script>
 {% endblock %}
