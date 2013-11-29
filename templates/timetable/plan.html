@@ -68,7 +68,7 @@
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
                                                         <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true"};
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ss"};
                                                                 mod.events.push(evt);
                                                         </script>
                                                         <span id="{{m.id}}" class="offer_event">
@@ -106,10 +106,10 @@
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
                                                         <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true"};
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws"};
                                                                 mod.events.push(evt);
                                                         </script>
-                                                        <span id="{{m.id}}" class="offer_event">
+                                                        <span class="{{m.id}}" class="offer_event">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
@@ -172,13 +172,6 @@
                         }
 
                         //$("span."+$(this).attr("name")).css('color','yellow');
-                        
-                        //alert(module.mods[1].events[0].type);
-                                              
-                         //var evt={name:"6",from:"12"};
-                         //week.day[2].events.push(evt);
-
-                        //alert(week.day[1].events[0].from);
 
                 });
 
@@ -201,6 +194,7 @@
                         }
                 });
                 
+                
                 $('#test_out_btn').click(function(){
                         for(var i in week.day)
                         {       
@@ -208,7 +202,7 @@
                                 for(var j in week.day[i].events)
                                 {
                                         $('#test_out').append( week.day[i].events[j].modul+":"+week.day[i].events[j].type
-                                                +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to+"("+week.day[i].events[j].flag+")"
+                                                +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to+"("+week.day[i].events[j].flag+")"+week.day[i].events[j].semester
                                                 +'<br />');
                                 }
                         }
