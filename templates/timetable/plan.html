@@ -91,9 +91,9 @@
                         {% if ws_moduls %}
                         {% for modul in ws_moduls.distinct %}
                                 <script>
-                                        var mod = {number:"{{ modul.number}}",events:[]};
+                                        var mod = {number:"{{ modul.number}}",events:[],exercise:0,lab:0};
                                 </script>
-                                <tr class="offer_ws offer" id="{{ modul.number}}" >
+                                <tr class="offer_ws offer" id="{{ modul.number}}">
                                         <td>
                                                 <input type="button" value="+" name="{{ modul.number }}" class="btn_sel" id="{{ modul.number }}_btn_sel">
                                                 <input type="button" value="-" name="{{ modul.number }}" class="btn_desel" id="{{ modul.number }}_btn_desel" style="display:none;">
@@ -108,6 +108,13 @@
                                                         <script>
                                                                 var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws",id:"{{ m.id }}"};
                                                                 mod.events.push(evt);
+                                        
+                                                                if("{{m.eventtype}}" == 'Praktikum'){
+                                                                        mod.lab++;
+                                                                }
+                                                                else if("{{m.eventtype}}" == 'Übung'){
+                                                                        mod.exercise++;
+                                                                }
                                                         </script>
                                                         <span class="{{m.id}}" class="offer_event">
                                                                 {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
@@ -137,7 +144,6 @@
                                 {id:"4", events:[] }, 
                                 {id:"5", events:[] }, 
                                 {id:"6", events:[] }, 
-                                {id:"7", events:[] }, 
                          ]};
 
         	$('#select_semester').change(function (){
@@ -200,12 +206,15 @@
                                 $('#test_out').append("day "+i+":"+'<br />');
                                 for(var j in week.day[i].events)
                                 {
-                                        $('#test_out').append( week.day[i].events[j].modul+":"+week.day[i].events[j].type
+                                        if(week.day[i].events[j].flag=="true"){
+                                                $('#test_out').append( week.day[i].events[j].modul+":"+week.day[i].events[j].type
                                                 +"::"+week.day[i].events[j].from+"-"+week.day[i].events[j].to+"("+week.day[i].events[j].flag+")"+week.day[i].events[j].semester
-                                                +'<br />');
+                                                +'<br />');        
+                                        }
                                 }
                         }
                 });
+
 
                 function checkOverLeap()
                 {
@@ -228,12 +237,29 @@
                                                 }
                                                 else
                                                 {
-                                                     week.day[i].events[j].flag="false";
-                                                     week.day[i].events[k].flag="false";
-                                                     $("span."+week.day[i].events[j].id).css('color','yellow');
-                                                     $("span."+week.day[i].events[k].id).css('color','yellow');
+                                                     if(week.day[i].events[k].eventtype!="Vorlesung" || week.day[i].events[k].eventtype!='Seminar'){
+                                                        week.day[i].events[k].flag="false";
+                                                     }   
+                                                     else if(week.day[i].events[j].eventtype!="Vorlesung" || week.day[i].events[j].eventtype!='Seminar'){
+                                                        week.day[i].events[j].flag="false";
+                                                     }
+                                                     else{
+                                                        week.day[i].events[k].flag="false";
+                                                     }
+                                                     
                                                 }
                                         }
+                                }
+
+                                for( var j=0;j<week.day[i].events.length-1;j++)
+                                { 
+                                        if(week.day[i].events[j].flag=="true"){
+                                                $("span."+week.day[i].events[j].id).css('color','green');
+                                        }
+                                        else{
+                                                $("span."+week.day[i].events[j].id).css('color','yellow');
+                                        }
+                                        
                                 }
 
                         }
