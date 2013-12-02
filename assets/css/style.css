@@ -23,13 +23,13 @@ a:active {
 	top: 1px;
 	right: -1px;}
 
-
-table.ov{	border:solid 1px black;}
-
-td{border:solid 1px black;}
+table{border:solid 1px black;}
+th,td{border-bottom:solid 1px black;}
 
 .offer{	display:none;}
 .offer_events{	
 	display:none;
 	color:green;
 	}
+
+	.table-day{display:table-row;}
