@@ -31,3 +31,5 @@ th,td{border-bottom:solid 1px black;}
 	display:none;
 	color:green;
 	}
+
+	.table-day{display:table-row;}
