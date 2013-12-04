@@ -245,10 +245,9 @@
 
                                 for( var j=0;j<week.day[i].events.length-2;j++)
                                 {       
-                                        if(week.day[i].events[j].flag=="false"){continue;}
                                         for( var k=j+1;k<week.day[i].events.length-1;k++)
                                         {
-                                                if(week.day[i].events[k].flag=="false"){continue;}
+                                                if(week.day[i].events[k].flag=="false" && week.day[i].events[j].flag=="false"){continue;}
                                                 if(week.day[i].events[j].semester == week.day[i].events[k].semester && (
                                                         week.day[i].events[j].from > week.day[i].events[k].to 
                                                         ||  week.day[i].events[j].to < week.day[i].events[k].from ))
