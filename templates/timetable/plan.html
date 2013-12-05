@@ -34,7 +34,7 @@
         </table>
 
         <br /><hr><br />
-        table output: <input type="button" id="table_out_btn" value="do it">
+        table output: 
         <div id="table_out" class="container"></div>
 
         <br /><hr><br />
@@ -199,7 +199,8 @@
                         checkOverLeap();
                 });
 
-                $('#table_out_btn').click(function(){checkOverLeap();
+                function updateTimetable()
+                {
                         $('#table_out').empty();
                         $('#table_out').append("<div id='table_out_div' class=''></div>");
                         
@@ -207,8 +208,7 @@
                                 if(j==6){
                                         $('#table_out_div').append("<div id='table-time-head' class='row'></div>");
                                         $('#table-time-head').append("<div id='table-time-head-day' class='rowh col-md-1' >h/day</div>");
-                                        for(var i in week.day)
-                                        {
+                                        for(var i in week.day){
                                                 $('#table-time-head').append("<div id='table-time-head-day"+i+"' class='rowh col-md-1' >"+i+"</div>");
                                         }
                                 }
@@ -218,22 +218,22 @@
                                 { 
                                         var flag='false';
                                         var mod_number="";
-                                        for(var k in week.day[i].events)
-                                        {
+                                        for(var k in week.day[i].events){
                                                 var splitfrom = week.day[i].events[k].from.split(":");
                                                 var splitto = week.day[i].events[k].to.split(":");
                                                 var from =splitfrom[0];
                                                 var to =splitto[0];
                                                 mod_number=week.day[i].events[k].modul;
                                                 //##
-                                                if(from >= j && from<(j+1) || to<= (j+1) && to >= j
-                                                        ){
+                                                if(from >= j && from<(j+1) || to<= (j+1) && to >= j){
                                                         flag="true";
                                                 }
                                         }
 
                                         if(flag=='true'){
-                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' style='background:green;'>"+mod_number+"</div>");
+                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' style='background:green;'>"
+                                                        +"<span  class='modcell'>"
+                                                        +mod_number+"</span></div>");
                                         }
                                         else{
                                                 $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' >&nbsp;</div>");
@@ -241,8 +241,7 @@
                                         
                                 }
                         }
-                        
-                });
+                }
 
                 function checkOverLeap()
                 {
@@ -261,11 +260,9 @@
                                                 if(week.day[i].events[k].flag=="false" && week.day[i].events[j].flag=="false"){continue;}
                                                 if(week.day[i].events[j].semester == week.day[i].events[k].semester && (
                                                         week.day[i].events[j].from > week.day[i].events[k].to 
-                                                        ||  week.day[i].events[j].to < week.day[i].events[k].from ))
-                                                {
+                                                        ||  week.day[i].events[j].to < week.day[i].events[k].from )){
                                                 }
-                                                else
-                                                {
+                                                else{
                                                      if(week.day[i].events[k].eventtype!="Vorlesung" || week.day[i].events[k].eventtype!='Seminar'){
                                                         week.day[i].events[k].flag="false";
                                                      }   
@@ -274,8 +271,7 @@
                                                      }
                                                      else{
                                                         week.day[i].events[k].flag="false";
-                                                     }
-                                                     
+                                                     }                    
                                                 }
                                         }
                                 }
@@ -288,10 +284,9 @@
                                         else{
                                                 $("span."+week.day[i].events[j].id).css('color','yellow');
                                         }
-                                        
                                 }
-
                         }
+                        updateTimetable();
                 }
 	</script>
 {% endblock %}
