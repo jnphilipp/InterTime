@@ -34,8 +34,8 @@
         </table>
 
         <br /><hr><br />
-        testoutput: <input type="button" id="test_out_btn" value="do it">
-        <div id="test_out" class="container"></div>
+        table output: <input type="button" id="table_out_btn" value="do it">
+        <div id="table_out" class="container"></div>
 
         <br /><hr><br />
 
@@ -199,21 +199,32 @@
                         checkOverLeap();
                 });
 
-                $('#test_out_btn').click(function(){checkOverLeap();
-                        $('#test_out').append("<div id='test_out_div' class=''></div>");
+                $('#table_out_btn').click(function(){checkOverLeap();
+                        $('#table_out').empty();
+                        $('#table_out').append("<div id='table_out_div' class=''></div>");
                         
                         for(var j=6;j<23;j++){
-                                $('#test_out_div').append("<div id='table-time"+j+"' class='row'></div>");
+                                if(j==6){
+                                        $('#table_out_div').append("<div id='table-time-head' class='row'></div>");
+                                        $('#table-time-head').append("<div id='table-time-head-day' class='rowh col-md-1' >h/day</div>");
+                                        for(var i in week.day)
+                                        {
+                                                $('#table-time-head').append("<div id='table-time-head-day"+i+"' class='rowh col-md-1' >"+i+"</div>");
+                                        }
+                                }
+                                $('#table_out_div').append("<div id='table-time"+j+"' class='row'></div>");
+                                $('#table-time'+j).append("<div id='table-time"+j+"' class='rowh col-md-1' >"+j+"</div>");
                                 for(var i in week.day)
                                 { 
-
                                         var flag='false';
+                                        var mod_number="";
                                         for(var k in week.day[i].events)
                                         {
                                                 var splitfrom = week.day[i].events[k].from.split(":");
                                                 var splitto = week.day[i].events[k].to.split(":");
                                                 var from =splitfrom[0];
                                                 var to =splitto[0];
+                                                mod_number=week.day[i].events[k].modul;
                                                 //##
                                                 if(from >= j && from<(j+1) || to<= (j+1) && to >= j
                                                         ){
@@ -222,10 +233,10 @@
                                         }
 
                                         if(flag=='true'){
-                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='col-md-1' style='background:black;'>test</div>");
+                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' style='background:green;'>"+mod_number+"</div>");
                                         }
                                         else{
-                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='col-md-1' >"+j+"</div>");
+                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' >&nbsp;</div>");
                                         }        
                                         
                                 }
