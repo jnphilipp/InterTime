@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from timetable.models import Deparment, Event, Modul
+from timetable.models import Department, Event, Modul
 
 def index(request):
 	return render(request, 'index.html')
@@ -13,11 +13,11 @@ def details(request, modul_id):
 	return render(request, 'timetable/details.html', {'modul': modul})
 
 def departments(request):
-	departments = Deparment.objects.all().order_by('name')
+	departments = Department.objects.all().order_by('name')
 	return render(request, 'timetable/departments.html', {'departments':departments})
 
 def department_details(request, department_id):
-	department = get_object_or_404(Deparment, pk=department_id)
+	department = get_object_or_404(Department, pk=department_id)
 	return render(request, 'timetable/department_details.html', {'department': department})
 
 def plan(request):

@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.forms import TextInput
 from django.db import models
-from timetable.models import Deparment, Event, EventType, FieldOfStudy, Location, Instructor, Modul, ModulType, ModulFieldOfStudy, Selection, Semester, Source, Student
+from timetable.models import Department, Event, EventType, FieldOfStudy, Location, Instructor, Modul, ModulType, ModulFieldOfStudy, Selection, Semester, Source, Student
 
 class SourceAdmin(admin.ModelAdmin):
 	list_display = ('url', 'regex')
@@ -27,7 +27,7 @@ class ModulTypeAdmin(admin.ModelAdmin):
 		(None, {'fields': ['name']}),
 	]
 
-class DeparmentAdmin(admin.ModelAdmin):
+class DepartmentAdmin(admin.ModelAdmin):
 	list_display = ('name',)
 
 	formfield_overrides = {
@@ -49,7 +49,7 @@ class ModulAdmin(admin.ModelAdmin):
 
 	fieldsets = [
 		(None, {'fields': ['number', 'name', 'lp', 'modultype', 'description']}),
-		('Field of Study', {'fields': ['deparment', 'fields']}),
+		('Field of Study', {'fields': ['department', 'fields']}),
 	]
 	filter_horizontal = ('fields',)
 
@@ -143,7 +143,7 @@ class StudentInline(admin.StackedInline):
 class UserAdmin(UserAdmin):
 	inlines = (StudentInline, )
 
-admin.site.register(Deparment, DeparmentAdmin)
+admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventType)
 admin.site.register(FieldOfStudy)

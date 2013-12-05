@@ -19,7 +19,7 @@ class ModulType(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class Deparment(models.Model):
+class Department(models.Model):
 	name = models.CharField(max_length=256, unique=True)
 
 	def __unicode__(self):
@@ -27,7 +27,7 @@ class Deparment(models.Model):
 
 class FieldOfStudy(models.Model):
 	name = models.CharField(max_length=256, unique=True)
-	deparment = models.ForeignKey(Deparment)
+	department = models.ForeignKey(Department)
 
 	def __unicode__(self):
 		return self.name
@@ -45,7 +45,7 @@ class Modul(models.Model):
 	lp = models.IntegerField(blank=True, null=True)
 	modultype = models.ForeignKey(ModulType, blank=True, null=True)
 	description = models.TextField(blank=True, null=True)
-	deparment = models.ForeignKey(Deparment, blank=True, null=True)
+	department = models.ForeignKey(Department, blank=True, null=True)
 	fields = models.ManyToManyField(ModulFieldOfStudy, null=True)
 
 	def __unicode__(self):

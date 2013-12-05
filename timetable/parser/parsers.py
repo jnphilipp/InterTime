@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from timetable.models import Deparment, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester
+from timetable.models import Department, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester
 from urllib2 import urlopen
 import HTMLParser
 import re
@@ -21,7 +21,7 @@ class IFIWS13(BaseParser):
 
 	def fetch(self):
 		html = super(IFIWS13, self).fetch('http://www.informatik.uni-leipzig.de/ifi/studium/stundenplan/ws2013/w13stdgang.html')
-		deparment, created = Deparment.objects.get_or_create(name='Institut für Informatik')
+		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 		semester, created = Semester.objects.get_or_create(name='Wintersemester')
 
 
@@ -45,14 +45,14 @@ class IFIWS13(BaseParser):
 					modul, created = Modul.objects.get_or_create(number=number)
 					if created:
 						modul.name = name
-						modul.deparment = deparment
+						modul.department = department
 						modul.save()
 					moduls.add(modul)
 
 				if len(numbers) == 0:
 					modul, created = Modul.objects.get_or_create(number=None, name=name)
 					if created:
-						modul.deparment = deparment
+						modul.department = department
 						modul.save()
 					moduls.add(modul)
 
@@ -66,7 +66,7 @@ class IFIWS13(BaseParser):
 
 				m = re.search(r'href="studium/stundenplan/ws2013/w13stdgang.html#.+?">(.+?)</a>', header.group(1), flags=re.M|re.S)
 				if m:
-					field, created = FieldOfStudy.objects.get_or_create(name=m.group(1), deparment=deparment)
+					field, created = FieldOfStudy.objects.get_or_create(name=m.group(1), department=department)
 
 				m = re.search(r'<td nowrap="nowrap">(\d+?). Sem.</td>', header.group(1), flags=re.M|re.S)
 				if m:
