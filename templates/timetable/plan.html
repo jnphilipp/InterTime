@@ -117,7 +117,7 @@
                                                                 }
                                                         </script>
                                                         <span class="{{m.id}}" class="offer_event">
-                                                                {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                                {{m.eventtype}} ({{ m.weekday }}: {{ m.begin }}Uhr - {{ m.end }}Uhr) <br />
                                                         </span>
                                                 {% endfor %}
                                         </td>
@@ -207,13 +207,14 @@
                         for(var j=6;j<23;j++){
                                 if(j==6){
                                         $('#table_out_div').append("<div id='table-time-head' class='row'></div>");
-                                        $('#table-time-head').append("<div id='table-time-head-day' class='rowh col-md-1' >h/day</div>");
-                                        for(var i in week.day){
-                                                $('#table-time-head').append("<div id='table-time-head-day"+i+"' class='rowh col-md-1' >"+i+"</div>");
+                                        $('#table-time-head').append("<div id='table-time-head-day' class='rowh col-md-1' >h/day</div>");               
+					for(var i in week.day){
+                                                $('#table-time-head').append("<div id='table-time-head-day"+i+"' class='rowh col-md-1' >"+woche(i)+"</div>");
                                         }
                                 }
+				var stunde = j+":00Uhr";
                                 $('#table_out_div').append("<div id='table-time"+j+"' class='row'></div>");
-                                $('#table-time'+j).append("<div id='table-time"+j+"' class='rowh col-md-1' >"+j+"</div>");
+                                $('#table-time'+j).append("<div id='table-time"+j+"' class='rowh col-md-1' >"+stunde+"</div>");
                                 for(var i in week.day)
                                 { 
                                         var flag='false';
@@ -288,5 +289,39 @@
                         }
                         updateTimetable();
                 }
+
+		function woche(tage)
+		{
+			var wochentag;
+			if(tage==0)
+				{
+			 	wochentag="Monday";
+				}
+			if(tage==1)
+				{
+			 	wochentag="Tuesday";
+				}
+			if(tage==2)
+				{
+			 	wochentag="Wednesday";
+				}
+			if(tage==3)
+				{
+			 	wochentag="Thursday";
+				}
+			if(tage==4)
+				{
+			 	wochentag="Friday";
+				}
+			if(tage==5)
+				{
+			 	wochentag="Saturday";
+				}
+			if(tage==6)
+				{
+			 	wochentag="Sunday";
+				}
+			return wochentag;                            	
+		}
 	</script>
 {% endblock %}
