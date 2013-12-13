@@ -24,3 +24,7 @@ def plan(request):
 	ws_moduls = Modul.objects.all().order_by('number').filter(event__semester__name='Wintersemester').filter(number__isnull=False).filter(event__weekday__isnull=False)
 	ss_moduls = Modul.objects.all().order_by('number').filter(event__semester__name='Sommersemester').filter(number__isnull=False).filter(event__weekday__isnull=False)
 	return render(request, 'timetable/plan.html',{'ws_moduls': ws_moduls,'ss_moduls': ss_moduls})
+
+
+
+

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load timetable_extras %}
 
 {% block title %}{{ block.super }} - Stundenplan{% endblock %}
 
@@ -72,7 +73,7 @@
                                                                 mod.events.push(evt);
                                                         </script>
                                                         <span id="{{m.id}}" class="offer_event">
-                                                                {{m.eventtype}} ( {{ m.weekday }}: {{ m.begin }} - {{ m.end }}) <br />
+                                                                {{m.eventtype}} ( {{ m.weekday|convert_weekday }}: {{ m.begin }} - {{ m.end }}) <br />
                                                         </span>
                                                 {% endfor %}
                                         </td></td>
@@ -106,7 +107,7 @@
                                         <td class="offer_events" id="{{ modul.number}}_events">
                                                 {% for m in modul.event_set.all %}
                                                         <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws",id:"{{ m.id }}"};
+                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}",weekday: "{{ m.weekday|convert_weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws",id:"{{ m.id }}"};
                                                                 mod.events.push(evt);
                                         
                                                                 if("{{m.eventtype}}" == 'Praktikum'){
@@ -117,7 +118,7 @@
                                                                 }
                                                         </script>
                                                         <span class="{{m.id}}" class="offer_event">
-                                                                {{m.eventtype}} ({{ m.weekday }}: {{ m.begin }}Uhr - {{ m.end }}Uhr) <br />
+                                                                {{m.eventtype}} ({{ m.weekday|convert_weekday }}: {{ m.begin }}Uhr - {{ m.end }}Uhr) <br />
                                                         </span>
                                                 {% endfor %}
                                         </td>
@@ -224,7 +225,7 @@
                                                 var splitto = week.day[i].events[k].to.split(":");
                                                 var from =splitfrom[0];
                                                 var to =splitto[0];
-                                                mod_number=week.day[i].events[k].modul;
+                                                var mod_number=week.day[i].events[k].modul;
                                                 //##
                                                 if(from >= j && from<(j+1) || to<= (j+1) && to >= j){
                                                         flag="true";
@@ -295,31 +296,31 @@
 			var wochentag;
 			if(tage==0)
 				{
-			 	wochentag="Monday";
+			 	wochentag="Montag";
 				}
 			if(tage==1)
 				{
-			 	wochentag="Tuesday";
+			 	wochentag="Dienstag";
 				}
 			if(tage==2)
 				{
-			 	wochentag="Wednesday";
+			 	wochentag="Mittwoch";
 				}
 			if(tage==3)
 				{
-			 	wochentag="Thursday";
+			 	wochentag="Donnerstag";
 				}
 			if(tage==4)
 				{
-			 	wochentag="Friday";
+			 	wochentag="Freitag";
 				}
 			if(tage==5)
 				{
-			 	wochentag="Saturday";
+			 	wochentag="Samstag";
 				}
 			if(tage==6)
 				{
-			 	wochentag="Sunday";
+			 	wochentag="Sonntag";
 				}
 			return wochentag;                            	
 		}
