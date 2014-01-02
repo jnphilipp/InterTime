@@ -107,7 +107,7 @@ class LocationAdmin(admin.ModelAdmin):
 
 class EventAdmin(admin.ModelAdmin):
 	list_display = ('name', 'modul', 'semester', 'get_instructors')
-	list_filter = ('semester',)
+	list_filter = ('semester', 'modul')
 	search_fields = ('name', 'modul')
 	ordering = ('name', 'modul')
 

@@ -75,13 +75,13 @@ class IFIWS13(BaseParser):
 						if not modul.fields.filter(id=modulfield.id):
 							modul.fields.add(modulfield)
 
-			ms = re.finditer(r'<table class="full s_veranstaltung">.*?(?=<table class="full s_veranstaltung">)', match.group(1), flags=re.M|re.S)
+			ms = re.finditer(r'<table class="full s_veranstaltung">.*?(?=<table class="full s_veranstaltung">|</table>\s+</table>)', match.group(1), flags=re.M|re.S)
 			for m in ms:
 				mm = re.search(r's_termin_titel[^>]*><b>([^<]*)<', m.group(0), flags=re.M|re.S)
 				if mm:
 					eventname = mm.group(1)
 
-				events = re.finditer(r'<table class="full">.*?(?=</table>)', m.group(0), flags=re.M|re.S)
+				events = re.finditer(r'<table class="full">.*?(?=</table>|</tr>)', m.group(0), flags=re.M|re.S)
 				for e in events:
 					mm = re.search(r'<td class="s_termin_typ">([^<]*)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
@@ -122,7 +122,8 @@ class IFIWS13(BaseParser):
 							for instructor in event_instructors:
 								event.instructors.add(instructor)
 							event.save()
-							
+
+
 #Hochschulsport
 class HSS(BaseParser):
 
