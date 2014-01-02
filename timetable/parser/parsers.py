@@ -8,7 +8,7 @@ import re
 class BaseParser(object):
 	def fetch(self, url):
 		r = urlopen(url)
-		encoding = r.headers['content-type'].split('charset=')[-1]
+		encoding = r.headers['content-type'].split('charset=')[-1] if 'charset=' in r.headers['content-type'] else 'iso-8859-1'
 		html = unicode(r.read(), encoding)
 		r.close
 
@@ -126,7 +126,6 @@ class IFIWS13(BaseParser):
 
 #Hochschulsport
 class HSS(BaseParser):
-
 	def fetch(self):
 		abc = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 		i = 0
