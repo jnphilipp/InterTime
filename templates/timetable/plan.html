@@ -6,123 +6,121 @@
 {% block toggle_login %}{% endblock %}
 
 {% block content %}
-<div style="margin-left: 2em; margin-right: 2em;">
-	<script type="text/javascript">
-		function Set() {
-			var setObj = {}, val = {};
+<script type="text/javascript">
+	function Set() {
+		var setObj = {}, val = {};
 
-			this.add = function(str) {
-				setObj[str] = val;
-			};
+		this.add = function(str) {
+		setObj[str] = val;
+		};
 
-			this.contains = function(str) {
-				return setObj[str] === val;
-			};
+		this.contains = function(str) {
+			return setObj[str] === val;
+		};
 
-			this.remove = function(str) {
-				delete setObj[str];
-			};
+		this.remove = function(str) {
+			delete setObj[str];
+		};
 
-			this.values = function() {
-				var values = [];
-				for (var i in setObj) {
-					if (setObj[i] === val) {
-						values.push(i);
-					}
+		this.values = function() {
+			var values = [];
+			for (var i in setObj) {
+				if (setObj[i] === val) {
+					values.push(i);
 				}
-				return values;
-			};
-		}
+			}
+			return values;
+		};
+	}
 
-		var module= {mods:[{},]};
-		var selected_events = new Set();
-	</script>
+	var module= {mods:[{},]};
+	var selected_events = new Set();
+</script>
 
-	<p><h1 style="text-align: center;">Semesterplan</h1></p>
-	<p>
-		<h4>select semester:</h4>
-		<select id="select_semester">
-			<option value="-1">choose one</option>
+<p><h1 style="text-align: center;">Semesterplan</h1></p>
+<p>
+	<h4>select semester:</h4>
+	<select id="select_semester">
+		<option value="-1">choose one</option>
+		{% for semester in semesters %}
+			<option value="{{ semester.id }}">{{ semester.name }}</option>
+		{% endfor %}
+	</select>
+	<hr>
+</p>
+
+<p>
+	<h4>available moduls:</h4>
+	<table id="offering">
+		<thead>
+			<tr>
+				<th></th>
+				<th>name</th>
+				<th>nummer</th>
+				<th>lp</th>
+				<th>type</th>
+				<th>description</th>
+			</tr>
+		</thead>
+		<tbody id="offer_body">
 			{% for semester in semesters %}
-				<option value="{{ semester.id }}">{{ semester.name }}</option>
-			{% endfor %}
-		</select>
-		<hr>
-	</p>
-
-	<p>
-		<h4>available moduls:</h4>
-		<table id="offering">
-			<thead>
-				<tr>
-					<th></th>
-					<th>name</th>
-					<th>nummer</th>
-					<th>lp</th>
-					<th>type</th>
-					<th>description</th>
-				</tr>
-			</thead>
-			<tbody id="offer_body">
-				{% for semester in semesters %}
-					{% for modul in semester|module %}
-						<tr class="offer_sem{{ semester.id }} offer" id="{{ modul.number }}">
-							<td>
-								<input type="checkbox" id="{{ modul.number }}_checkbox" name="modul" value="{{ modul.number }}" class="modul_checkbox">
-							</td>
-							<td>{{ modul.name }}</td>
-							<td>{{ modul.number }}</td>
-							<td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
-							<td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
-							<td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
+				{% for modul in semester|module %}
+					<tr class="offer_sem{{ semester.id }} offer" id="{{ modul.number }}">
+						<td>
+							<input type="checkbox" id="{{ modul.number }}_checkbox" name="modul" value="{{ modul.number }}" class="modul_checkbox">
+						</td>
+						<td>{{ modul.name }}</td>
+						<td>{{ modul.number }}</td>
+						<td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
+						<td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
+						<td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
+					</tr>
+					{% for event in modul|events:semester %}
+						<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
+							<td></td>
+							<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+							<td>{{ event.eventtype }}</td>
+							<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
+							<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
 						</tr>
-						{% for event in modul|events:semester %}
-							<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
-								<td></td>
-								<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox" name="event" value="{{ event.id }}"> {{ event.name }}</td>
-								<td>{{ event.eventtype }}</td>
-								<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
-								<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
-							</tr>
-						{% endfor %}
 					{% endfor %}
 				{% endfor %}
-			</tbody>
-		</table>
-	</p>
+			{% endfor %}
+		</tbody>
+	</table>
+</p>
 
-	<p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+<p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
 
-	<script type="text/javascript">
-		$('#select_semester').change(function() {
-			var x = document.getElementById('select_semester');
-			for ( i = 0; i < x.options.length; i++) {
-				$('.offer_sem' + x[i].value).css('display', 'none');
-			}
-			if ( $(this).val() != -1 ) {
-				$('.offer_sem' + $(this).val()).css('display', 'table-row');
-			}
-		});
+<script type="text/javascript">
+	$('#select_semester').change(function() {
+		var x = document.getElementById('select_semester');
+		for ( i = 0; i < x.options.length; i++) {
+			$('.offer_sem' + x[i].value).css('display', 'none');
+		}
+		if ( $(this).val() != -1 ) {
+			$('.offer_sem' + $(this).val()).css('display', 'table-row');
+		}
+	});
 
-		$('.modul_checkbox').click(function() {
-			if ( this.checked ) {
-				$('.modul_' + $(this).val() + '_events').css('display', 'table-row');
-			}
-			else {
-				$('.modul_' + $(this).val() + '_events').css('display', 'none');
-			}
-		});
+	$('.modul_checkbox').click(function() {
+		if ( this.checked ) {
+			$('.modul_' + $(this).val() + '_events').css('display', 'table-row');
+		}
+		else {
+			$('.modul_' + $(this).val() + '_events').css('display', 'none');
+		}
+	});
 
-		$('.event_checkbox').click(function() {
-			if ( this.checked ) {
-				selected_events.add($(this).val());
-			}
-			else {
-				selected_events.remove($(this).val());
-			}
-			var site  = '{% url 'timetable' %}'
-			document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
-		});
-	</script>
-</div>
+	$('.event_checkbox').click(function() {
+		if ( this.checked ) {
+			selected_events.add($(this).val());
+		}
+		else {
+			selected_events.remove($(this).val());
+		}
+		var site  = '{% url 'timetable' %}'
+		document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+	});
+</script>
 {% endblock %}

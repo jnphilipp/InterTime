@@ -24,7 +24,7 @@ def convert_weekday(weekday):
 
 @register.filter
 def module(semester):
-	return Modul.objects.all().order_by('name').filter(event__semester=semester).filter(number__isnull=False).filter(event__weekday__isnull=False).distinct()
+	return Modul.objects.all().order_by('name').filter(event__semester=semester).filter(number__isnull=False).distinct()
 
 @register.filter
 def events(modul, semester):

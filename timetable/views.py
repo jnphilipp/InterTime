@@ -27,7 +27,7 @@ def plan(request):
 
 def timetable(request):
 	req = request.GET.get('events')
-	events = Event.objects.filter(id__in=req.split(',') if req else '').order_by('weekday')
+	events = Event.objects.filter(id__in=req.split(',') if req else '').filter(weekday__isnull=False).order_by('weekday')
 	event_list = []
 	for event in events:
 		duration = timedelta(hours=event.end.hour - event.begin.hour, minutes=event.end.minute - event.begin.minute)

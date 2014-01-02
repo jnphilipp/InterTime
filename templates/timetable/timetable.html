@@ -6,44 +6,42 @@
 {% block toggle_login %}{% endblock %}
 
 {% block content %}
-<div style="margin-left: 2em; margin-right: 2em;">
-	<div class="timetable" data-days="7" data-hours="16">
-		<ul class="tt-events" id="tt-events">
-			{% for event in event_list %}
-				{% autoescape off %}
-					{{ event }}
-				{% endautoescape %}
-			{% endfor %}
-		</ul>
+div class="timetable" data-days="7" data-hours="16">
+	<ul class="tt-events" id="tt-events">
+		{% for event in event_list %}
+			{% autoescape off %}
+				{{ event }}
+			{% endautoescape %}
+		{% endfor %}
+	</ul>
 
-		<div class="tt-times">
-			<div class="tt-time" data-time="0">07<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="1">08<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="2">09<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="3">10<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="4">11<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="5">12<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="6">13<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="7">14<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="8">15<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="9">16<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="10">17<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="11">18<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="12">19<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="13">20<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="14">21<span class="hidden-phone">.00</span></div>
-			<div class="tt-time" data-time="15">22<span class="hidden-phone">.00</span></div>
-		</div>
+	<div class="tt-times">
+		<div class="tt-time" data-time="0">07<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="1">08<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="2">09<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="3">10<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="4">11<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="5">12<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="6">13<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="7">14<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="8">15<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="9">16<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="10">17<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="11">18<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="12">19<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="13">20<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="14">21<span class="hidden-phone">.00</span></div>
+		<div class="tt-time" data-time="15">22<span class="hidden-phone">.00</span></div>
+	</div>
 
-		<div class="tt-days">
-			<div class="tt-day" data-day="0">M<span class="hidden-phone">on</span></div>
-			<div class="tt-day" data-day="1">T<span class="hidden-phone">ue</span></div>
-			<div class="tt-day" data-day="2">W<span class="hidden-phone">ed</span></div>
-			<div class="tt-day" data-day="3">T<span class="hidden-phone">hu</span></div>
-			<div class="tt-day" data-day="4">F<span class="hidden-phone">ri</span></div>
-			<div class="tt-day" data-day="5">S<span class="hidden-phone">a</span></div>
-			<div class="tt-day" data-day="6">S<span class="hidden-phone">o</span></div>
-		</div>
+	<div class="tt-days">
+		<div class="tt-day" data-day="0">M<span class="hidden-phone">on</span></div>
+		<div class="tt-day" data-day="1">T<span class="hidden-phone">ue</span></div>
+		<div class="tt-day" data-day="2">W<span class="hidden-phone">ed</span></div>
+		<div class="tt-day" data-day="3">T<span class="hidden-phone">hu</span></div>
+		<div class="tt-day" data-day="4">F<span class="hidden-phone">ri</span></div>
+		<div class="tt-day" data-day="5">S<span class="hidden-phone">a</span></div>
+		<div class="tt-day" data-day="6">S<span class="hidden-phone">o</span></div>
 	</div>
 </div>
 {% endblock %}
