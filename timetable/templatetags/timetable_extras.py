@@ -1,4 +1,5 @@
 from django.template import Library
+from timetable.models import Modul
 
 register = Library()
 
@@ -17,6 +18,14 @@ def convert_weekday(weekday):
 	elif weekday==5 or weekday == '5':
 		return "Samstag"
 	elif weekday==6 or weekday == '6':
-		return "Sonntag" 
+		return "Sonntag"
 	else:
 		return ""
+
+@register.filter
+def module(semester):
+	return Modul.objects.all().order_by('name').filter(event__semester=semester).filter(number__isnull=False).filter(event__weekday__isnull=False).distinct()
+
+@register.filter
+def events(modul, semester):
+	return modul.event_set.filter(semester=semester)

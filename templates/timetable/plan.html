@@ -6,532 +6,123 @@
 {% block toggle_login %}{% endblock %}
 
 {% block content %}
+<div style="margin-left: 2em; margin-right: 2em;">
+	<script type="text/javascript">
+		function Set() {
+			var setObj = {}, val = {};
 
-<div class="timetable" data-days="7" data-hours="8">
-            <ul class="tt-events">
-                <li class="tt-event btn-success" data-id="10" data-day="0" data-start="0" data-duration="1.5">
-                    AS Applied Maths (ASAMath 1)<br />
-                    09:00 - 10:30<br />
-                    C318 ACL Lecture</li>
-                <li class="tt-event btn-success" data-id="11" data-day="0" data-start="1.6667" data-duration="1.5">
-                    A2 Statistics (A2Stat 2)<br />
-                    10:40 - 12:10<br />
-                    C310 ACL Lecture</li>
-                <li class="tt-event btn-primary" data-id="12" data-day="0" data-start="4.1667" data-duration="1.5">
-                    A2 Pure Maths (A2PMath 1)<br />
-                    13:10 - 14:40<br />
-                    B125 ACL Tutorial</li>
-                <li class="tt-event btn-warning" data-id="13" data-day="0" data-start="5.6667" data-duration="1.8333">
-                    Marking<br />
-                    14:40 - 16:30<br />
-                    Self managed time</li>
-                <li class="tt-event btn-danger" data-id="14" data-day="0" data-start="6" data-duration="0.25">
-                    Bob Smith<br />
-                    15:00 - 15:15<br />
-                    Meeting</li>
-                <li class="tt-event btn-danger" data-id="15" data-day="0" data-start="6.75" data-duration="0.25">
-                    Jane Jones<br />
-                    15:45 - 16:00<br />
-                    Meeting</li>
-                <li class="tt-event btn-warning" data-id="20" data-day="1" data-start="0" data-duration="1.6667">
-                    Marking<br />
-                    09:00 - 10:40<br />
-                    Self managed time</li>
-                <li class="tt-event btn-success" data-id="21" data-day="1" data-start="1.6667" data-duration="1.5">
-                    AS Pure Maths (ASPMath)<br />
-                    10:40 - 12:10<br />
-                    C300 ACL Lecture</li>
-                <li class="tt-event btn-danger" data-id="22" data-day="1" data-start="3.1667" data-duration="0.25">
-                    Fred Brown<br />
-                    12:10 - 12:25<br />
-                    Meeting</li>
-                <li class="tt-event btn-success" data-id="23" data-day="1" data-start="4.1667" data-duration="1.5">
-                    AS Applied Maths (ASAMath 1)<br />
-                    13:10 - 14:40<br />
-                    C318 ACL Lecture</li>
-                <li class="tt-event btn-primary" data-id="24" data-day="1" data-start="5.8334" data-duration="1.5">
-                    A2 Statistics (A2Stat 2)<br />
-                    14:50 - 16:20<br />
-                    B121 ACL Tutorial</li>
-                <li class="tt-event btn-info" data-id="30" data-day="2" data-start="0" data-duration="8">
-                    Open day</li>
-                <li class="tt-event btn-primary" data-id="31" data-day="2" data-start="0" data-duration="1.5">
-                    AS Applied Maths (ASAMath 1)<br />
-                    09:00 - 10:30<br />
-                    C318 ACL Tutorial</li>
-                <li class="tt-event btn-primary" data-id="32" data-day="2" data-start="1.6667" data-duration="1.5">
-                    A2 Statistics (A2Stat 2)<br />
-                    10:40 - 12:10<br />
-                    C310 ACL Tutorial</li>
-                <li class="tt-event btn-success" data-id="33" data-day="2" data-start="4.1667" data-duration="1.5">
-                    A2 Pure Maths (A2PMath 1)<br />
-                    13:10 - 14:40<br />
-                    B125 ACL Lecture</li>
-                <li class="tt-event btn-success" data-id="34" data-day="2" data-start="5.8334" data-duration="1.5">
-                    AS Pure Maths (ASPMath)<br />
-                    14:50 - 16:20<br />
-                    B125 ACL Lecture</li>
-                <li class="tt-event btn-warning" data-id="40" data-day="3" data-start="0" data-duration="3">
-                    Marking<br />
-                    09:00 - 12:00<br />
-                    Marking</li>
-                <li class="tt-event btn-danger" data-id="41" data-day="3" data-start="3" data-duration="1.75">
-                    Planning meeting<br />
-                    12:00 - 13:45<br />
-                    A223 Meeting</li>
-                <li class="tt-event btn-danger" data-id="42" data-day="3" data-start="5" data-duration="0.5">
-                    Fred Brown<br />
-                    14:00 - 14:30<br />
-                    B137 Viva</li>
-                <li class="tt-event btn-danger" data-id="43" data-day="3" data-start="5.5" data-duration="0.5">
-                    Bob Smith<br />
-                    14:30 - 15:00<br />
-                    B137 Viva</li>
-                <li class="tt-event btn-danger" data-id="44" data-day="3" data-start="6" data-duration="0.5">
-                    Jane Jones<br />
-                    15:00 - 15:30<br />
-                    B137 Viva</li>
-                <li class="tt-event btn-danger" data-id="45" data-day="3" data-start="6.5" data-duration="0.5">
-                    Harry Franks<br />
-                    15:30 - 16:00<br />
-                    B137 Viva</li>
-                <li class="tt-event btn-info" data-id="50" data-day="6" data-start="0" data-duration="7">
-                    Not working</li>
-            </ul>
-            <div class="tt-times">
-                    <div class="tt-time" data-time="0">
-                    09<span class="hidden-phone">.00</span></div>
-                  <div class="tt-time" data-time="1">
-                    10<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="2">
-                    11<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="3">
-                    12<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="4">
-                    13<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="5">
-                    14<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="6">
-                    15<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="7">
-                    16<span class="hidden-phone">.00</span></div>
-                
-            </div>
-            <div class="tt-days">
-                <div class="tt-day" data-day="0">
-                    M<span class="hidden-phone">on</span></div>
-                <div class="tt-day" data-day="1">
-                    T<span class="hidden-phone">ue</span></div>
-                <div class="tt-day" data-day="2">
-                    W<span class="hidden-phone">ed</span></div>
-                <div class="tt-day" data-day="3">
-                    T<span class="hidden-phone">hu</span></div>
-                <div class="tt-day" data-day="4">
-                    F<span class="hidden-phone">ri</span></div>
-                <div class="tt-day" data-day="5">
-                    S<span class="hidden-phone">a</span></div>
-                <div class="tt-day" data-day="6">
-                    S<span class="hidden-phone">o</span></div>
-            </div>
-        </div>
-    
-    
-    
-    
+			this.add = function(str) {
+				setObj[str] = val;
+			};
 
+			this.contains = function(str) {
+				return setObj[str] === val;
+			};
 
-        <script> 
-                var module= {mods:[ 
-                                {}, 
-                         ]};
-        </script>
-        
+			this.remove = function(str) {
+				delete setObj[str];
+			};
 
-    
-        <font size="+2">Semesterplan</font><br>
-        <h3>select semester</h3>
-        <select id="select_semester">
-        	<option value="5">choose one</option>
-        	<option value="0">Sommersemester</option>
-        	<option value="1">Wintersemester</option>
-        </select>
-        <hr>
-        <h3> selected moduls</h3>
-        <table id="selected">
-                <thead>
-                        <th>select</th>
-                        <th>name</th>
-                        <th>nummer</th>
-                        <th>lp</th>
-                        <th>type</th>
-                        <th>description</th>
-                        <th>events</th>
-                </thead>
-                <tbody id="selected_body">
-                </tbody>
-        </table>
-
-        <br /><hr><br />
-        table output: 
-<div class="timetable" data-days="7" data-hours="16">
-            <ul class="tt-events" id="tt-events">
-                
-            </ul>
-            <div class="tt-times">
-                    <div class="tt-time" data-time="0">
-                    07<span class="hidden-phone">.00</span></div>
-                  <div class="tt-time" data-time="1">
-                    08<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="2">
-                    09<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="3">
-                    10<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="4">
-                    11<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="5">
-                    12<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="6">
-                    13<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="7">
-                    14<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="8">
-                    15<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="9">
-                    16<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="10">
-                    17<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="11">
-                    18<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="12">
-                    19<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="13">
-                    20<span class="hidden-phone">.00</span></div>
-                <div class="tt-time" data-time="14">
-                    21<span class="hidden-phone">.00</span></div>
-                    <div class="tt-time" data-time="15">
-                    22<span class="hidden-phone">.00</span></div>
-                    
-            </div>
-            <div class="tt-days">
-                <div class="tt-day" data-day="0">
-                    M<span class="hidden-phone">on</span></div>
-                <div class="tt-day" data-day="1">
-                    T<span class="hidden-phone">ue</span></div>
-                <div class="tt-day" data-day="2">
-                    W<span class="hidden-phone">ed</span></div>
-                <div class="tt-day" data-day="3">
-                    T<span class="hidden-phone">hu</span></div>
-                <div class="tt-day" data-day="4">
-                    F<span class="hidden-phone">ri</span></div>
-                <div class="tt-day" data-day="5">
-                    S<span class="hidden-phone">a</span></div>
-                <div class="tt-day" data-day="6">
-                    S<span class="hidden-phone">o</span></div>
-            </div>
-        </div>
-    
-    
-        <br /><hr><br />
-
-        <h3>available moduls</h3>
-        <table id="offering">
-        	<thead>
-                        <th>select</th>
-                        <th>name</th>
-			<th>nummer</th>
-			<th>lp</th>
-			<th>type</th>
-			<th>description</th>
-        	</thead>
-        	<tbody id="offer_body">
-        		{% if ss_moduls %}
-                        {% for modul in ss_moduls.distinct %}
-                                <script>
-                                        var mod = {number:"{{ modul.number}}",events:[]};
-                                </script>
-                                <tr class="offer_ss offer" id="{{ modul.number}}">
-                                        <td>
-                                                <input type="button" value="+" name="{{ modul.number }}" class="btn_sel" id="{{ modul.number }}_btn_sel">
-                                                <input type="button" value="-" name="{{ modul.number }}" class="btn_desel" id="{{ modul.number }}_btn_desel" style="display:none;">
-                                        </td>
-                                        <td>{{ modul.name}}</td>
-                                        <td>{{ modul.number}}</td>
-                                        <td>{{ modul.lp}}</td>
-                                        <td>{{ modul.modultype}}</td>
-                                        <td>{{ modul.description}}</td>
-                                        <td class="offer_events" id="{{ modul.number}}_events">
-                                                {% for m in modul.event_set.all %}
-                                                        <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ss",id:"{{ m.id }}"};
-                                                                mod.events.push(evt);
-                                                        </script>
-                                                        <span id="{{m.id}}" class="offer_event">
-                                                                {{m.eventtype}} ( {{ m.weekday|convert_weekday }}: {{ m.begin }} - {{ m.end }}) <br />
-                                                        </span>
-                                                {% endfor %}
-                                        </td></td>
-                                </tr>
-                                <script>
-                                        module.mods.push(mod);
-                                </script>
-                        {% endfor %}
-                        {% else %}
-                                <tr class="offer_ss offer" >
-                                        <td colspan="7"> no moduls avaiable</td>
-                                </tr>
-                        {% endif %}
-
-
-                        {% if ws_moduls %}
-                        {% for modul in ws_moduls.distinct %}
-                                <script>
-                                        var mod = {number:"{{ modul.number}}",events:[],exercise:0,lab:0};
-                                </script>
-                                <tr class="offer_ws offer" id="{{ modul.number}}">
-                                        <td>
-                                                <input type="button" value="+" name="{{ modul.number }}" class="btn_sel" id="{{ modul.number }}_btn_sel">
-                                                <input type="button" value="-" name="{{ modul.number }}" class="btn_desel" id="{{ modul.number }}_btn_desel" style="display:none;">
-                                        </td>
-                                        <td>{{ modul.name}}</td>
-                                        <td>{{ modul.number}}</td>
-                                        <td>{{ modul.lp}}</td>
-                                        <td>{{ modul.modultype}}</td>
-                                        <td>{{ modul.description}}</td>
-                                        <td class="offer_events" id="{{ modul.number}}_events">
-                                                {% for m in modul.event_set.all %}
-                                                        <script>
-                                                                var evt = {type: "{{m.eventtype}}" ,day: "{{ m.weekday }}",weekday: "{{ m.weekday|convert_weekday }}", from: "{{ m.begin }}", to: "{{ m.end }}" , modul:"{{ modul.number}}",flag:"true",semester:"ws",id:"{{ m.id }}"};
-                                                                mod.events.push(evt);
-                                        
-                                                                if("{{m.eventtype}}" == 'Praktikum'){
-                                                                        mod.lab++;
-                                                                }
-                                                                else if("{{m.eventtype}}" == 'Übung'){
-                                                                        mod.exercise++;
-                                                                }
-                                                        </script>
-                                                        <span class="{{m.id}}" class="offer_event">
-                                                                {{m.eventtype}} ({{ m.weekday|convert_weekday }}: {{ m.begin }}Uhr - {{ m.end }}Uhr) <br />
-                                                        </span>
-                                                {% endfor %}
-                                        </td>
-                                </tr>
-                                <script>
-                                        module.mods.push(mod);
-                                </script>
-                        {% endfor %}
-                        {% else %}
-                                <tr class="offer_ss offer" >
-                                        <td colspan="7"> no moduls avaiable</td>
-                                </tr>
-                        {% endif %}
-
-                        
-        	</tbody>
-        </table>
-        <script>
-                var week= {day:[ 
-                                {id:"0", events:[] }, 
-                                {id:"1", events:[] }, 
-                                {id:"2", events:[] }, 
-                                {id:"3", events:[] }, 
-                                {id:"4", events:[] }, 
-                                {id:"5", events:[] }, 
-                                {id:"6", events:[] }, 
-                         ]};
-
-        	$('#select_semester').change(function (){
-        		if($(this).val() !=5){
-        			if($(this).val()==0){
-        		              $('.offer_ss').css("display","table-row");
-                                      $('.offer_ws').css("display","none");
-        			}
-        			else if($(this).val()==1){
-                                      $('.offer_ws').css("display","table-row");
-                                      $('.offer_ss').css("display","none");
-        			}	
-        		}
-        	});
-        
-                $('.btn_sel').click(function(){
-                        $(this).css("display","none");
-                        $('#'+$(this).attr('name')+"_btn_desel").css("display","table-row");
-                        var name='#'+$(this).attr('name');
-                        $('#selected_body').append( $(name));
-                        $(name+'_events').css("display","table-row");
-
-                        for(var i in module.mods)
-                        {
-                                if(module.mods[i].number == $(this).attr("name"))
-                                {
-                                        for(var j in module.mods[i].events)
-                                        {
-                                            var day = module.mods[i].events[j].day;
-                                            if(day != undefined){
-                                               week.day[ day ].events.push(module.mods[i].events[j]);
-                                            }
-                                        }
-                                }
-                        }
-                        //checkOverLeap();
-                        $('#tt-events').append('<li class="tt-event btn-success" data-id="112" data-day="2" data-start="3" data-duration="1.5"> AS Applied Maths (ASAMath 1)<br />    09:00 - 10:30<br />  C318 ACL Lecture</li>');
-                });
-
-                $('.btn_desel').click(function(){
-                        $(this).css("display","none");
-                        $('#'+$(this).attr('name')+"_btn_sel").css("display","table-row");
-                        var name='#'+$(this).attr('name');
-                        $('#offer_body').append($(name));
-                        $(name+'_events').css("display","none");                 
-                        for(var i in week.day)
-                        {       
-                                for( var j=week.day[i].events.length-1;j>=0;j--)
-                                {
-                                        if(week.day[i].events[j].modul == $(this).attr('name'))
-                                        {
-                                                week.day[i].events.splice(j,1);
-                                                j=week.day[i].events.length;
-                                        }
-                                }
-                        }
-                        checkOverLeap();
-                });
-
-                function updateTimetable()
-                {
-
-
-
-
-
-
-
-
-                        //events
-                        
-                        
-                        $('#tt-events').append('<li class="tt-event btn-success" data-id="22" data-day="2" data-start="5" data-duration="1.5"> AS Applied Maths (ASAMath 1)<br />    09:00 - 10:30<br />  C318 ACL Lecture</li>');
-
-
-                        /*
-                        for(var j=6;j<23;j++){
-                                if(j==6){
-                                        $('#table_out_div').append("<div id='table-time-head' class='row'></div>");
-                                        $('#table-time-head').append("<div id='table-time-head-day' class='rowh col-md-1' >h/day</div>");               
-					                    for(var i in week.day){
-                                                $('#table-time-head').append("<div id='table-time-head-day"+i+"' class='rowh col-md-1' >"+woche(i)+"</div>");
-                                        }
-                                }
-				                var stunde = j+":00Uhr";
-                                $('#table_out_div').append("<div id='table-time"+j+"' class='row'></div>");
-                                $('#table-time'+j).append("<div id='table-time"+j+"' class='rowh col-md-1' >"+stunde+"</div>");
-                                for(var i in week.day)
-                                { 
-                                        var flag='false';
-                                        var mod_number="";
-                                        for(var k in week.day[i].events){
-                                                var splitfrom = week.day[i].events[k].from.split(":");
-                                                var splitto = week.day[i].events[k].to.split(":");
-                                                var from =splitfrom[0];
-                                                var to =splitto[0];
-                                                var mod_number=week.day[i].events[k].modul;
-                                                //##
-                                                if(from >= j && from<(j+1) || to<= (j+1) && to >= j){
-                                                        flag="true";
-                                                }
-                                        }
-
-                                        if(flag=='true'){
-                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' style='background:green;'>"
-                                                        +"<span  class='modcell'>"
-                                                        +mod_number+"</span></div>");
-                                        }
-                                        else{
-                                                $('#table-time'+j).append("<div id='table-time"+j+"+day"+i+"' class='rowh col-md-1' >&nbsp;</div>");
-                                        }        
-                                        
-                                }
-                        }*/
-                }
-
-                function checkOverLeap()
-                {
-                        for(var i in week.day)
-                        {       
-                                for( var j=0;j<week.day[i].events.length-1;j++)
-                                { 
-                                        week.day[i].events[j].flag="true";
-                                        $("span."+week.day[i].events[j].id).css('color','green');
-                                }
-
-                                for( var j=0;j<week.day[i].events.length-2;j++)
-                                {       
-                                        for( var k=j+1;k<week.day[i].events.length-1;k++)
-                                        {
-                                                if(week.day[i].events[k].flag=="false" && week.day[i].events[j].flag=="false"){continue;}
-                                                if(week.day[i].events[j].semester == week.day[i].events[k].semester && (
-                                                        week.day[i].events[j].from > week.day[i].events[k].to 
-                                                        ||  week.day[i].events[j].to < week.day[i].events[k].from )){
-                                                }
-                                                else{
-                                                     if(week.day[i].events[k].eventtype!="Vorlesung" || week.day[i].events[k].eventtype!='Seminar'){
-                                                        week.day[i].events[k].flag="false";
-                                                     }   
-                                                     else if(week.day[i].events[j].eventtype!="Vorlesung" || week.day[i].events[j].eventtype!='Seminar'){
-                                                        week.day[i].events[j].flag="false";
-                                                     }
-                                                     else{
-                                                        week.day[i].events[k].flag="false";
-                                                     }                    
-                                                }
-                                        }
-                                }
-
-                                for( var j=0;j<week.day[i].events.length-1;j++)
-                                { 
-                                        if(week.day[i].events[j].flag=="true"){
-                                                $("span."+week.day[i].events[j].id).css('color','green');
-                                        }
-                                        else{
-                                                $("span."+week.day[i].events[j].id).css('color','yellow');
-                                        }
-                                }
-                        }
-                        updateTimetable();
-                }
-
-		function woche(tage)
-		{
-			var wochentag;
-			if(tage==0)
-				{
-			 	wochentag="Montag";
+			this.values = function() {
+				var values = [];
+				for (var i in setObj) {
+					if (setObj[i] === val) {
+						values.push(i);
+					}
 				}
-			if(tage==1)
-				{
-			 	wochentag="Dienstag";
-				}
-			if(tage==2)
-				{
-			 	wochentag="Mittwoch";
-				}
-			if(tage==3)
-				{
-			 	wochentag="Donnerstag";
-				}
-			if(tage==4)
-				{
-			 	wochentag="Freitag";
-				}
-			if(tage==5)
-				{
-			 	wochentag="Samstag";
-				}
-			if(tage==6)
-				{
-			 	wochentag="Sonntag";
-				}
-			return wochentag;                            	
+				return values;
+			};
 		}
+
+		var module= {mods:[{},]};
+		var selected_events = new Set();
 	</script>
+
+	<p><h1 style="text-align: center;">Semesterplan</h1></p>
+	<p>
+		<h4>select semester:</h4>
+		<select id="select_semester">
+			<option value="-1">choose one</option>
+			{% for semester in semesters %}
+				<option value="{{ semester.id }}">{{ semester.name }}</option>
+			{% endfor %}
+		</select>
+		<hr>
+	</p>
+
+	<p>
+		<h4>available moduls:</h4>
+		<table id="offering">
+			<thead>
+				<tr>
+					<th></th>
+					<th>name</th>
+					<th>nummer</th>
+					<th>lp</th>
+					<th>type</th>
+					<th>description</th>
+				</tr>
+			</thead>
+			<tbody id="offer_body">
+				{% for semester in semesters %}
+					{% for modul in semester|module %}
+						<tr class="offer_sem{{ semester.id }} offer" id="{{ modul.number }}">
+							<td>
+								<input type="checkbox" id="{{ modul.number }}_checkbox" name="modul" value="{{ modul.number }}" class="modul_checkbox">
+							</td>
+							<td>{{ modul.name }}</td>
+							<td>{{ modul.number }}</td>
+							<td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
+							<td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
+							<td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
+						</tr>
+						{% for event in modul|events:semester %}
+							<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
+								<td></td>
+								<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+								<td>{{ event.eventtype }}</td>
+								<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
+								<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
+							</tr>
+						{% endfor %}
+					{% endfor %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</p>
+
+	<p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+
+	<script type="text/javascript">
+		$('#select_semester').change(function() {
+			var x = document.getElementById('select_semester');
+			for ( i = 0; i < x.options.length; i++) {
+				$('.offer_sem' + x[i].value).css('display', 'none');
+			}
+			if ( $(this).val() != -1 ) {
+				$('.offer_sem' + $(this).val()).css('display', 'table-row');
+			}
+		});
+
+		$('.modul_checkbox').click(function() {
+			if ( this.checked ) {
+				$('.modul_' + $(this).val() + '_events').css('display', 'table-row');
+			}
+			else {
+				$('.modul_' + $(this).val() + '_events').css('display', 'none');
+			}
+		});
+
+		$('.event_checkbox').click(function() {
+			if ( this.checked ) {
+				selected_events.add($(this).val());
+			}
+			else {
+				selected_events.remove($(this).val());
+			}
+			var site  = '{% url 'timetable' %}'
+			document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+		});
+	</script>
+</div>
 {% endblock %}
