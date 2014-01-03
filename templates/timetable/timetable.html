@@ -6,7 +6,7 @@
 {% block toggle_login %}{% endblock %}
 
 {% block content %}
-div class="timetable" data-days="7" data-hours="16">
+<div class="timetable" data-days="7" data-hours="16">
 	<ul class="tt-events" id="tt-events">
 		{% for event in event_list %}
 			{% autoescape off %}
