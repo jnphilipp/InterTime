@@ -24,14 +24,14 @@ a:active {
 	right: -1px;}
 
 table{border:solid 1px black;}
-th,td{border-bottom:solid 1px black;}
+th,td {border-bottom: solid 1px black;
+	padding-left: 10px;
+	padding-right: 10px;}
 
-.offer{	display:none;}
-.offer_events{	
-	display:none;
-	color:green;
-	}
+.offer{display:none;}
+.offer_events{display:none;
+	color:green;}
 
-	.table-day{display:table-row;}
-	.rowh{border:solid 1px black;}
-	.modcell{font-size: 10px;}
+.table-day{display:table-row;}
+.rowh{border:solid 1px black;}
+.modcell{font-size: 10px;}
