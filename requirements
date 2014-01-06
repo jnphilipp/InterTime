@@ -5,3 +5,4 @@ argparse==1.2.1
 django-suit==0.2.5
 urllib3==1.7.1
 wsgiref==0.1.2
+pdfminer==20131113
