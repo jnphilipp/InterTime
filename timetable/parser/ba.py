@@ -2,6 +2,7 @@
 #!/usr/bin/python
 import os, sys, re
 
+from urllib2 import urlopen
 from timetable.models import Department, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester, ModulType
 
 
@@ -12,9 +13,13 @@ class PdfparserBA():
 
 		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 
-		os.system('/usr/local/bin/pdf2txt.py -o a.out /home/mark/python/10_bs_informatik_Modulbeschreibung.pdf');
 
-		fobj = open("a.out", "r")
+		r = urlopen('http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ba-inf/ba-inf-module.html')
+		with open('/tmp/ba-inf.pdf', 'w') as f:
+			f.write(r.read())
+		os.system('/usr/local/bin/pdf2txt.py -o /tmp/a.out /tmp/ba-inf.pdf');
+
+		fobj = open("/tmp/a.out", "r")
 
 		counter=0
 		counter2 =0
