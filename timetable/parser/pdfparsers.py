@@ -1,28 +1,135 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
-import os, sys, re
-
 from urllib2 import urlopen
 from timetable.models import Department, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester, ModulType
+import os, sys, re
 
-
-class PdfparserMA():
-
-
+class BAInfParser():
 	def fetch(self):
-
-
 		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 
-		#os.system('/usr/local/bin/pdf2txt.py -o a.out /home/mark/python/M.Sc._Informatik_Modulbeschreibung_26-09-2013.pdf');
+		r = urlopen('http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ba-inf/ba-inf-module.html')
+		with open('/tmp/ba-inf.pdf', 'w') as f:
+			f.write(r.read())
+		os.system('pdf2txt.py -o /tmp/a.out /tmp/ba-inf.pdf');
+
+		fobj = open("/tmp/a.out", "r")
+
+		counter=0
+		counter2 =0
+		founddate=0
+
+		index=1
+		flag=0
+		flagInhalt=0
+
+		liste = []
+		liste2 = []
+		titles =[]
+		numbers=[]
+
+		letzteZeile='leer'
+
+		title=''
+		lp='0'
+		inhalt=''
+		modultype=''
+
+		for line in fobj: 
+			liste.insert(counter, line)
+			counter+=1
+
+			#modulnummer
+			if counter==1:
+				number=line
+
+			#Leistungspunkte
+			if '5 LP = 150 Arbeitsstunden (Workload)' in line:index+=1; lp=5
+			if '10 LP = 300 Arbeitsstunden (Workload)' in line:index+=1; lp=10
+
+			#modultitel bachelor
+
+			#inhalt
+			if line.strip() == 'Teilnahmevoraus-': flagInhalt=0
+			if flagInhalt==1: inhalt += line
+			if line.strip() =='Inhalt': flagInhalt=1
+
+
+			#???if counter==20: print line	#institut
+
+			letzteZeile=line
+
+			#str = line
+			match = re.search(r'\d\d?\.\s\w+\s\d{4}', line)
+			# If-statement after search() tests if it succeeded
+			#if match:                      
+				#print 'found', match.group() ## 'found word:cat'
+				#founddate+=1
+				#print founddate
+
+			if 'Vertiefungsmodul'==line.strip(): modultype='Vertiefungsmodul'
+			if 'Ergänzungsfach'==line.strip(): modultype='Ergänzungsfach'
+			if 'Kernmodul'==line.strip(): modultype='Kernmodul'
+			if 'Seminarmodul'==line.strip(): modultype='Seminarmodul'
+			if 'Ergänzungsfach Medizinische Informatik'==line.strip(): modultype='Ergänzungsfach Medizinische Informatik'
+
+
+			#neuer eintrag
+			if 'Modulnummer' in line:
+				flag+=1
+
+				#if index != flag: print title+ str(index) + ' '+str(flag)
+				#print lp
+		
+				#print inhalt
+
+				counter=0
+				liste2=liste
+				liste[:]=[]
+				#print title
+				if counter2>0:
+					titles.append(title.strip()	)
+					numbers.append(number.strip())
+					#print titles[counter2-1]+numbers[counter2-1]
+				counter2+=1
+
+
+				type, created = ModulType.objects.get_or_create(name=modultype)
+
+				modul, created = Modul.objects.get_or_create(number=number.strip())
+				if created or not modul.name:
+					modul.name = title.strip()
+				modul.lp=lp
+				modul.modultype=type
+				modul.description=inhalt
+				modul.department = department
+				#modul.fields='no clue what that is'
+				modul.save()
+
+
+
+
+
+
+				title=''
+				number=''
+				lp='0'
+				inhalt=''
+				modultype=''
+
+		fobj.close()
+
+
+
+class MAInfParser():
+	def fetch(self):
+		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 
 		r = urlopen('http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ma-inf/ma-inf-module.html')
 		with open('/tmp/ma-inf.pdf', 'w') as f:
 			f.write(r.read())
 
-		os.system('/usr/local/bin/pdf2txt.py -o /tmp/a.out /tmp/ma-inf.pdf');
-
-		#http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ma-inf/ma-inf-module.html		
+		os.system('pdf2txt.py -o /tmp/a.out /tmp/ma-inf.pdf');
 
 		fobj = open("/tmp/a.out", "r")
 
@@ -35,9 +142,6 @@ class PdfparserMA():
 		titles =[]
 		numbers=[]
 
-		letzteZeile='leer' 
-		fobj_out = open("test.txt","w")
-		fobj_out.write( "hhall")
 
 		title=''
 		flag=0
@@ -156,15 +260,13 @@ class PdfparserMA():
 
 				
 				modul, created = Modul.objects.get_or_create(number=modulNumber.strip())	
-				#if created:
-				modul.name = modulName.strip()
-				#print 'x'+modulName.strip()
-				modul.modultype=type
+				if created or not modul.name:
+					modul.name = modulName.strip()
+				if created or not modul.modultype:
+					modul.modultype=type
 				modul.department = department
 				#	print 'xxxx'
-					#modul.fields='no clue what that is'		#verwendbarkeit
-				#for instructor in event_instructors:
-				#	event.instructors.add(instructor)					
+					#modul.fields='no clue what that is'		#verwendbarkeit		
 
 				modul.description=inhalt
 				modul.lp=int(lp)
@@ -188,7 +290,3 @@ class PdfparserMA():
 
 
 		fobj.close()
-		fobj_out.close()
-
-
-

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from timetable.models import Event, Modul
-from timetable.parser.parsers import HSS
+from timetable.parser.htmlparsers import HSS
 
 class Command(BaseCommand):
 	args = ''

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from timetable.models import Event, Modul
-from timetable.parser.parsers import IFIWS13
+from timetable.parser.htmlparsers import IFIWS13
 
 class Command(BaseCommand):
 	args = ''
