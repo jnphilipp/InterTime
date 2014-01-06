@@ -78,7 +78,7 @@
 					{% for event in modul|events:semester %}
 						<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
 							<td></td>
-							<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+							<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
 							<td>{{ event.eventtype }}</td>
 							<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
 							<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
@@ -109,9 +109,18 @@
 		}
 		else {
 			$('.modul_' + $(this).val() + '_events').css('display', 'none');
+            
+            var elements = document.getElementsByClassName( $(this).val() );
+            for (var i=0; i<elements.length; i++) {
+               if( elements[i].checked == true){
+                alert(elements[i].value);
+                selected_events.remove( elements[i].value );
+               }
+            }
+            $('.'+ $(this).val()).prop('checked', false);
+            setLink();
 		}
 	});
-
 	$('.event_checkbox').click(function() {
 		if ( this.checked ) {
 			selected_events.add($(this).val());
@@ -119,8 +128,12 @@
 		else {
 			selected_events.remove($(this).val());
 		}
-		var site  = '{% url 'timetable' %}'
-		document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+        setLink();
 	});
+    function setLink()
+    {
+        var site  = '{% url 'timetable' %}'
+        document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+    }
 </script>
 {% endblock %}
