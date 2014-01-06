@@ -1,5 +1,6 @@
+from datetime import timedelta
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from timetable.models import Department, Event, Modul
+from timetable.models import Department, Event, Modul, Semester
 
 def index(request):
 	return render(request, 'index.html')
@@ -21,10 +22,19 @@ def department_details(request, department_id):
 	return render(request, 'timetable/department_details.html', {'department': department})
 
 def plan(request):
-	ws_moduls = Modul.objects.all().order_by('number').filter(event__semester__name='Wintersemester').filter(number__isnull=False).filter(event__weekday__isnull=False)
-	ss_moduls = Modul.objects.all().order_by('number').filter(event__semester__name='Sommersemester').filter(number__isnull=False).filter(event__weekday__isnull=False)
-	return render(request, 'timetable/plan.html',{'ws_moduls': ws_moduls,'ss_moduls': ss_moduls})
+	semesters = Semester.objects.all().order_by('name')
+	return render(request, 'timetable/plan.html', locals())
 
+def timetable(request):
+	req = request.GET.get('events')
+	events = Event.objects.filter(id__in=req.split(',') if req else '').filter(weekday__isnull=False).order_by('weekday')
+	event_list = []
+	for event in events:
+		duration = timedelta(hours=event.end.hour - event.begin.hour, minutes=event.end.minute - event.begin.minute)
+		seconds = duration.total_seconds()
+		hours = seconds // 3600
+		minutes = (seconds % 3600) // 60 / 60
+		title = '%s (%s - %s)' % (event.name, event.begin, event.end)
+		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 6) + (event.begin.minute / 60), hours + minutes, title, title))
 
-
-
+	return render(request, 'timetable/timetable.html', locals())

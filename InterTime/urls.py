@@ -11,4 +11,5 @@ urlpatterns = patterns('',
 	url(r'^departments/$', 'timetable.views.departments'),
 	url(r'^department/(?P<department_id>\d+)/$', 'timetable.views.department_details', name='blog-post'),
 	url(r'^plan/$', 'timetable.views.plan' ,name= 'Semesterplan'),
+	url(r'^plan/timetable/$', 'timetable.views.timetable' ,name= 'timetable'),
 )

@@ -8,7 +8,7 @@ import re
 class BaseParser(object):
 	def fetch(self, url):
 		r = urlopen(url)
-		encoding = r.headers['content-type'].split('charset=')[-1]
+		encoding = r.headers['content-type'].split('charset=')[-1] if 'charset=' in r.headers['content-type'] else 'iso-8859-1'
 		html = unicode(r.read(), encoding)
 		r.close
 
@@ -75,13 +75,13 @@ class IFIWS13(BaseParser):
 						if not modul.fields.filter(id=modulfield.id):
 							modul.fields.add(modulfield)
 
-			ms = re.finditer(r'<table class="full s_veranstaltung">.*?(?=<table class="full s_veranstaltung">)', match.group(1), flags=re.M|re.S)
+			ms = re.finditer(r'<table class="full s_veranstaltung">.*?(?=<table class="full s_veranstaltung">|</table>\s+</table>)', match.group(1), flags=re.M|re.S)
 			for m in ms:
 				mm = re.search(r's_termin_titel[^>]*><b>([^<]*)<', m.group(0), flags=re.M|re.S)
 				if mm:
 					eventname = mm.group(1)
 
-				events = re.finditer(r'<table class="full">.*?(?=</table>)', m.group(0), flags=re.M|re.S)
+				events = re.finditer(r'<table class="full">.*?(?=</table>|</tr>)', m.group(0), flags=re.M|re.S)
 				for e in events:
 					mm = re.search(r'<td class="s_termin_typ">([^<]*)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
@@ -122,3 +122,46 @@ class IFIWS13(BaseParser):
 							for instructor in event_instructors:
 								event.instructors.add(instructor)
 							event.save()
+
+
+#Hochschulsport
+class HSS(BaseParser):
+	def fetch(self):
+		abc = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+		i = 0
+
+		html = super(HSS, self).fetch('http://hochschulsport.uni-leipzig.de/angebote/aktueller_zeitraum/index.html')
+
+		for i in abc:
+			inhalt = re.finditer(r'<!-- BEGINN_INHALT_ZFH -->(.+?)(?=<!-- ENDE_INHALT_ZFH -->)', html, flags=re.M|re.S)
+			for index in inhalt:
+				veranstaltungen = re.finditer(r'href="(_'+i+'.+?.html)', index.group(1), flags=re.M|re.S) # hier nur für alle A-Kurse
+
+				for index2 in veranstaltungen:
+					#print index2.group(1)
+
+					html2 = super(HSS, self).fetch('http://hochschulsport.uni-leipzig.de/angebote/aktueller_zeitraum/'+index2.group(1))
+
+					seiten = re.finditer(r'<!-- BEGINN_INHALT_ZFH -->(.+?)(?=<!-- ENDE_INHALT_ZFH -->)', html2, flags=re.M|re.S)
+					for index3 in seiten:
+						informationen = re.search(r'bs_head">(.+?)<.+?bs_verantw">verantwortlich: (.+?)<.+?bs_kursbeschreibung.+?<p> (.+?)</p>(.*)', index3.group(1), flags=re.M|re.S)
+						if informationen:
+							print informationen.group(1) #Kursname
+							print informationen.group(2) #Verantwortlicher
+							print informationen.group(3) #Kursbeschreibung
+							#print informationen.group(4) #Rest
+							print ' '
+
+							events = re.finditer(r'bs_sdet(.+?)(?=bs_sbuch)', informationen.group(4), flags=re.M|re.S)
+							for index4 in events:
+								#print index4.group(1)
+								event = re.search(r'\'>(.+?)<.+?bs_stag\'>(.+?)</td.+?bs_szeit\'>(.+?)-(.+?)<.+?bs_sort\'>.+?\'.+?\'>(.+?)<.+?bs_szr.+?\'.+?\'>(.+?)<.+?bs_skl\'>(.+?)<', index4.group(1), flags=re.M|re.S)
+								if event:
+									print event.group(1) #Details
+									print event.group(2) #Tag
+									print event.group(3) #von
+									print event.group(4) #bis
+									print event.group(5) #Ort
+									print event.group(6) #Zeitraum
+									print event.group(7) #Lehrer/Leiter
+									print ' '
