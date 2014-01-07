@@ -78,10 +78,14 @@
 					{% for event in modul|events:semester %}
 						<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
 							<td></td>
-							<td><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+							<td id="{{ event.id }}_namefield" class="event_names"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
 							<td>{{ event.eventtype }}</td>
 							<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
 							<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
+                            <input type="hidden" id="{{ event.id }}_begin" value="{{ event.begin }}" >
+                            <input type="hidden" id="{{ event.id }}_end" value="{{ event.end }}" >
+                            <input type="hidden" id="{{ event.id }}_day" value="{{ event.weekday }}" >
+                            <input type="hidden" id="{{ event.id }}_modulnumber" value="{{ modul.number }}" >
 						</tr>
 					{% endfor %}
 				{% endfor %}
@@ -93,6 +97,11 @@
 <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
 
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('.modul_checkbox').prop('checked',false);
+        $('.event_checkbox').prop('checked',false);
+    });
+
 	$('#select_semester').change(function() {
 		var x = document.getElementById('select_semester');
 		for ( i = 0; i < x.options.length; i++) {
@@ -117,8 +126,8 @@
                }
             }
             $('.'+ $(this).val()).prop('checked', false);
-            setLink();
 		}
+        setLink();
 	});
 	$('.event_checkbox').click(function() {
 		if ( this.checked ) {
@@ -127,12 +136,50 @@
 		else {
 			selected_events.remove($(this).val());
 		}
+        checkoverleap();
         setLink();
 	});
     function setLink()
     {
         var site  = '{% url 'timetable' %}'
         document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+    }
+
+
+    function evt(begin,end,day,id,modul){
+        this.begin=begin;
+        this.end=end;
+        this.day=day;
+        this.id=id;
+        this.modul=modul;
+    }
+
+    function checkoverleap()
+    {
+        var evts = selected_events.values();
+        var events =new Array();
+        $('.event_names').css('color','black');
+        for(i=0;i<evts.length;i++){
+            var begin = document.getElementById(evts[i]+'_begin').value;
+            var end = document.getElementById(evts[i]+'_end').value;
+            var day = document.getElementById(evts[i]+'_day').value;
+            var modul= document.getElementById(evts[i]+'_modulnumber').value;
+            var e = new evt(begin,end,day,evts[i],modul);
+            events[i]=e;
+            $('#'+evts[i]+'_namefield').css('color','green');
+            
+        }
+        for(i=0;i<events.length;i++){
+            for(j=i;j<events.length;j++){
+                if(i==j){continue;}
+                if(events[i].day != events[j].day){continue;}
+
+                if(events[i].begin >= events[j].begin && events[i].begin < events[j].end){
+                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+evts[j]+'_namefield').css('color','red');
+                } 
+            }
+        }
     }
 </script>
 {% endblock %}
