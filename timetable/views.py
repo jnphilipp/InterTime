@@ -35,6 +35,6 @@ def timetable(request):
 		hours = seconds // 3600
 		minutes = (seconds % 3600) // 60 / 60
 		title = '%s (%s - %s)' % (event.name, event.begin, event.end)
-		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 6) + (event.begin.minute / 60), hours + minutes, title, title))
+		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 7) + (event.begin.minute / 60.0), hours + minutes, title, title))
 
 	return render(request, 'timetable/timetable.html', locals())

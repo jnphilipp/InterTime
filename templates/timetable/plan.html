@@ -46,6 +46,7 @@
 			<option value="{{ semester.id }}">{{ semester.name }}</option>
 		{% endfor %}
 	</select>
+    <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
 	<hr>
 </p>
 
@@ -94,7 +95,7 @@
 	</table>
 </p>
 
-<p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -126,6 +127,7 @@
                }
             }
             $('.'+ $(this).val()).prop('checked', false);
+            checkoverleap();
 		}
         setLink();
 	});
