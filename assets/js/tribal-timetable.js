@@ -132,7 +132,7 @@ $(function () {
         jQuery('.tt-events', this).css('top', timesHeight);
         /* check why different between height and width - times/days */
         var ttWidth = $(this).width();
-        var width = $(this).width() - jQuery('.tt-days', this).width() - ttDaysExtras;
+        var width = $(this).width() - jQuery('.tt-days', this).width() - ttDaysExtras - 1;
         var height = $(this).height();
         var hours = $(this).data('hours');
         var hourWidth = Math.floor(width / hours);
