@@ -107,3 +107,22 @@ class Student(models.Model):
 class Selection(models.Model):
 	student = models.ForeignKey(Student)
 	events = models.ManyToManyField(Event)
+
+class Sportkurs(models.Model):
+	name = models.CharField(max_length=256, unique=True)
+	description = models.CharField(max_length=2048, blank=True)
+	instructor = models.ForeignKey(Instructor, blank=True, null=True)
+
+	def __unicode__(self):
+		return self.name
+
+class SportkursEvent(models.Model):
+	kurs = models.ForeignKey(Sportkurs)
+	details = models.CharField(max_length=2048, blank=True)
+	weekday = models.IntegerField(blank=True, null=True)
+	begin = models.TimeField(blank=True, null=True)
+	end = models.TimeField(blank=True, null=True)
+	begin_day = models.DateField(blank=True, null=True)
+	end_day = models.DateField(blank=True, null=True)
+	location = models.ForeignKey(Location, blank=True, null=True)
+	instructor = models.ForeignKey(Instructor, blank=True, null=True)
