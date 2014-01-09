@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from timetable.models import Department, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester
+from timetable.models import Department, Event, EventType, FieldOfStudy, Instructor, Location, Modul, ModulFieldOfStudy, Semester, Sportkurs, SportkursEvent
 from urllib2 import urlopen
 import HTMLParser
 import re
@@ -128,40 +128,42 @@ class IFIWS13(BaseParser):
 class HSS(BaseParser):
 	def fetch(self):
 		abc = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+		weekdays =["mo","di","mi","do","fr","sa","so"]
+
 		i = 0
-
 		html = super(HSS, self).fetch('http://hochschulsport.uni-leipzig.de/angebote/aktueller_zeitraum/index.html')
-
 		for i in abc:
 			inhalt = re.finditer(r'<!-- BEGINN_INHALT_ZFH -->(.+?)(?=<!-- ENDE_INHALT_ZFH -->)', html, flags=re.M|re.S)
 			for index in inhalt:
 				veranstaltungen = re.finditer(r'href="(_'+i+'.+?.html)', index.group(1), flags=re.M|re.S) # hier nur für alle A-Kurse
 
 				for index2 in veranstaltungen:
-					#print index2.group(1)
-
 					html2 = super(HSS, self).fetch('http://hochschulsport.uni-leipzig.de/angebote/aktueller_zeitraum/'+index2.group(1))
 
 					seiten = re.finditer(r'<!-- BEGINN_INHALT_ZFH -->(.+?)(?=<!-- ENDE_INHALT_ZFH -->)', html2, flags=re.M|re.S)
 					for index3 in seiten:
 						informationen = re.search(r'bs_head">(.+?)<.+?bs_verantw">verantwortlich: (.+?)<.+?bs_kursbeschreibung.+?<p> (.+?)</p>(.*)', index3.group(1), flags=re.M|re.S)
 						if informationen:
-							print informationen.group(1) #Kursname
-							print informationen.group(2) #Verantwortlicher
-							print informationen.group(3) #Kursbeschreibung
-							#print informationen.group(4) #Rest
-							print ' '
+							firstname, lastname = informationen.group(2).rsplit(' ', 1)#Verantwortlicher
+							instructor, created = Instructor.objects.get_or_create(firstname=firstname, lastname=lastname)
+
+							kurs, created = Sportkurs.objects.get_or_create(name=informationen.group(1))
+							if created or not kurs.description:
+								kurs.description = informationen.group(3)
+								kurs.instructor = instructor
 
 							events = re.finditer(r'bs_sdet(.+?)(?=bs_sbuch)', informationen.group(4), flags=re.M|re.S)
 							for index4 in events:
-								#print index4.group(1)
 								event = re.search(r'\'>(.+?)<.+?bs_stag\'>(.+?)</td.+?bs_szeit\'>(.+?)-(.+?)<.+?bs_sort\'>.+?\'.+?\'>(.+?)<.+?bs_szr.+?\'.+?\'>(.+?)<.+?bs_skl\'>(.+?)<', index4.group(1), flags=re.M|re.S)
 								if event:
-									print event.group(1) #Details
-									print event.group(2) #Tag
-									print event.group(3) #von
-									print event.group(4) #bis
-									print event.group(5) #Ort
+									firstname, lastname = event.group(7).rsplit(' ', 1)#Lehrer/Leiter
+									einstructor, created = Instructor.objects.get_or_create(firstname=firstname, lastname=lastname)
+									location, created = Location.objects.get_or_create(room=event.group(5))
+
+									wd = event.group(2)
+									if '<br />' in event.group(2):
+										wd = event.group(2).split('<br />')[0]
+
+									weekday = weekdays.index(str.lower(str(wd)))
+									spevent, created = SportkursEvent.objects.get_or_create(kurs=kurs, details=event.group(1), weekday=weekday, begin=event.group(3), end=event.group(4), location=location)
 									print event.group(6) #Zeitraum
-									print event.group(7) #Lehrer/Leiter
-									print ' '
