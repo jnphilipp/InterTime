@@ -51,25 +51,22 @@
 </p>
 
 <p>
-	<h4>available moduls:</h4>
-	<table id="offering">
+  <div class="table_div container" style="display:none;">
+    <h4>available moduls:</h4>
+	<table id="offering" >
 		<thead>
 			<tr>
-				<th></th>
-				<th>name</th>
-				<th>nummer</th>
-				<th>lp</th>
-				<th>type</th>
-				<th>description</th>
+				<th class="span7">name</th>
+				<th class="span2">nummer</th>
+				<th class="span1">lp</th>
+				<th class="span1">type</th>
+				<th class="span2">description</th>
 			</tr>
 		</thead>
 		<tbody id="offer_body">
 			{% for semester in semesters %}
 				{% for modul in semester|module %}
-					<tr class="offer_sem{{ semester.id }} offer" id="{{ modul.number }}">
-						<td>
-							<input type="checkbox" id="{{ modul.number }}_checkbox" name="modul" value="{{ modul.number }}" class="modul_checkbox">
-						</td>
+					<tr class="offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}">
 						<td>{{ modul.name }}</td>
 						<td>{{ modul.number }}</td>
 						<td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
@@ -77,9 +74,8 @@
 						<td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
 					</tr>
 					{% for event in modul|events:semester %}
-						<tr class="modul_{{ modul.number }}_events offer" id="{{ modul.number }}_{{ event.id }}">
-							<td></td>
-							<td id="{{ event.id }}_namefield" class="event_names"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+						<tr class="modul_{{ modul.number }}_events offer offer_event" id="{{ modul.number }}_{{ event.id }}">
+							<td id="{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
 							<td>{{ event.eventtype }}</td>
 							<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
 							<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
@@ -93,17 +89,18 @@
 			{% endfor %}
 		</tbody>
 	</table>
+  </div>
 </p>
-
 
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('.modul_checkbox').prop('checked',false);
+        //$('.modul_checkbox').prop('checked',false);
         $('.event_checkbox').prop('checked',false);
     });
 
 	$('#select_semester').change(function() {
+        $(".table_div").css('display','block');
 		var x = document.getElementById('select_semester');
 		for ( i = 0; i < x.options.length; i++) {
 			$('.offer_sem' + x[i].value).css('display', 'none');
@@ -113,24 +110,28 @@
 		}
 	});
 
-	$('.modul_checkbox').click(function() {
-		if ( this.checked ) {
-			$('.modul_' + $(this).val() + '_events').css('display', 'table-row');
+    
+    $('div.table_div > table').delegate('tr.offer_modul','click',function(){
+		
+        if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
+			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
+            $(this).css("background-color","#FF8C00");
 		}
 		else {
-			$('.modul_' + $(this).val() + '_events').css('display', 'none');
-            
-            var elements = document.getElementsByClassName( $(this).val() );
+			$('.modul_' + $(this).attr('id') + '_events').css('display', 'none');
+            $(this).css("background-color","white");   
+            var elements = document.getElementsByClassName( $(this).attr('id') );
             for (var i=0; i<elements.length; i++) {
                if( elements[i].checked == true){
                 selected_events.remove( elements[i].value );
                }
             }
-            $('.'+ $(this).val()).prop('checked', false);
-            checkoverleap();
+            $('.'+ $(this).attr('id')).prop('checked', false);
 		}
+        checkoverleap();
         setLink();
 	});
+    /*
 	$('.event_checkbox').click(function() {
 		if ( this.checked ) {
 			selected_events.add($(this).val());
@@ -140,7 +141,21 @@
 		}
         checkoverleap();
         setLink();
-	});
+	});*/
+    $('div.table_div > table').delegate('tr.offer_event','click',function(){
+
+        if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
+        {
+            $( '#'+$(this).attr('id')+'_checkbox').prop('checked',true);
+            selected_events.add($( '#'+$(this).attr('id')+'_checkbox').val());
+        }
+        else{
+            $( '#'+$(this).attr('id')+'_checkbox').prop('checked',false);   
+            selected_events.remove($( '#'+$(this).attr('id')+'_checkbox').val());
+        }
+        checkoverleap();
+        setLink();
+    });
     function setLink()
     {
         var site  = '{% url 'timetable' %}'

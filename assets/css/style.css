@@ -23,8 +23,28 @@ a:active {
 	top: 1px;
 	right: -1px;}
 
+
 table{border:solid 1px black;}
-th,td {border-bottom: solid 1px black;
+
+tr.offer_modul{
+	border:1px solid black;
+}
+tr.offer_modul td{
+	padding-top:3px;
+	padding-bottom:3px;
+}
+tr.offer_modul:hover{
+	background-color: #FFEC8B;
+	cursor:pointer;
+}
+tr.offer_event:hover{
+	cursor:pointer;
+}
+tr.offer_event td{
+	background-color: #e0e0e0;
+	border: solid 0px black;
+}
+th,td {
 	padding-left: 10px;
 	padding-right: 10px;}
 
