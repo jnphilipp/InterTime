@@ -46,7 +46,7 @@
 			<option value="{{ semester.id }}">{{ semester.name }}</option>
 		{% endfor %}
 	</select>
-    <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+    <p><a id="link_timetable_top" href="{% url 'timetable' %}">display timetable</a></p>
 	<hr>
 </p>
 
@@ -91,6 +91,8 @@
 	</table>
   </div>
 </p>
+<hr>
+<p><a id="link_timetable_bottom" href="{% url 'timetable' %}">display timetable</a></p>
 
 
 <script type="text/javascript">
@@ -159,7 +161,8 @@
     function setLink()
     {
         var site  = '{% url 'timetable' %}'
-        document.getElementById('link_timetable').href = site + '?events=' + selected_events.values();
+        document.getElementById('link_timetable_top').href = site + '?events=' + selected_events.values();
+        document.getElementById('link_timetable_bottom').href = site + '?events=' + selected_events.values();
     }
 
 
