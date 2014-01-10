@@ -50,89 +50,138 @@
     <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
 	<hr>
 </p>
+<div id="content">
+    <div id="content_moduls" class="content_div">
+        <h3><p class="content_elements" id="content_module">Module: </p></h3>
+        <div class="content_elements_div" id="content_module_div">
 
-<p>
-  <div class="table_div" style="display:none;">
-    <h4>available moduls:</h4>
-	<table id="offering" style="width:80%;">
-		<thead>
-			<tr>
-				<th >name</th>
-				<th >nummer</th>
-				<th >lp</th>
-				<th >type</th>
-				<th >description</th>
-			</tr>
-		</thead>
-		<tbody id="offer_body">
-			{% for semester in semesters %}
-				{% for modul in semester|module %}
-					<tr class="offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}">
-						<td>{{ modul.name }}</td>
-						<td>{{ modul.number }}</td>
-						<td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
-						<td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
-						<td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
-					</tr>
-					{% for event in modul|events:semester %}
-						<tr class="modul_{{ modul.number }}_events offer offer_event" id="{{ modul.number }}_{{ event.id }}">
-							<td id="{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
-							<td>{{ event.eventtype }}</td>
-							<td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
-							<td colspan="2">{{ event.begin }} - {{ event.end }}</td>
-                            <input type="hidden" id="{{ event.id }}_begin" value="{{ event.begin }}" >
-                            <input type="hidden" id="{{ event.id }}_end" value="{{ event.end }}" >
-                            <input type="hidden" id="{{ event.id }}_day" value="{{ event.weekday }}" >
-                            <input type="hidden" id="{{ event.id }}_modulnumber" value="{{ modul.number }}" >
-						</tr>
-					{% endfor %}
-				{% endfor %}
-			{% endfor %}
-		</tbody>
-	</table>
+            <table id="offering" style="width:90%;">
+                <thead>
+                    <tr>
+                        <th >name</th>
+                        <th >nummer</th>
+                        <th >lp</th>
+                        <th >type</th>
+                        <th >description</th>
+                    </tr>
+                </thead>
+                <tbody id="offer_body">
+                    {% for semester in semesters %}
+                        {% for modul in semester|module %}
+                            <tr class="offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}">
+                                <td>{{ modul.name }}</td>
+                                <td>{{ modul.number }}</td>
+                                <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
+                                <td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
+                                <td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
+                            </tr>
+                            {% for event in modul|events:semester %}
+                                <tr class="offer_sem{{ semester.id }}_events modul_{{ modul.number }}_events offer offer_event" id="{{ modul.number }}_{{ event.id }}">
+                                    <td id="{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+                                    <td>{{ event.eventtype }}</td>
+                                    <td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
+                                    <td colspan="2">{{ event.begin }} - {{ event.end }}</td>
+                                    <input type="hidden" id="{{ event.id }}_begin" value="{{ event.begin }}" >
+                                    <input type="hidden" id="{{ event.id }}_end" value="{{ event.end }}" >
+                                    <input type="hidden" id="{{ event.id }}_day" value="{{ event.weekday }}" >
+                                    <input type="hidden" id="{{ event.id }}_modulnumber" value="{{ modul.number }}" >
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
 
-    
-    <hr>
-    <span>Own Events:</span>
-    <div id="own_events_div">
+        </div>
+    </div>
+    <div id="content_hss" class="content_div">
+        <h3><p class="content_elements" id="content_hss">Highschool sport:</p></h3>
+        <div class="content_elements_div" id="content_hss_div">
+
         <table>
-            <thead> <th class="span4">Name</th> <th class="span4">Time</th> </thead>
-            <tbody id="own_events_table">
-                
+            <thead>
+                <tr>
+                    <td>name</td>
+                    <td>zeit</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>synchron ertrinken</td>
+                    <td>14:00 - 15:00</td>
+                </tr>
             </tbody>
         </table>
 
-    </div>
-    <div class="add_event_div">
-    <input type="button" value="add own event" id="add_event_btn"><br/>
-        <div id="add_event_container">
         </div>
-
-        
     </div>
+    <div id="content_own" class="content_div">
+        <h3><p class="content_elements" id="content_own">Own Events:</p></h3>
+        <div class="content_elements_div" id="content_own_div">
+            <div id="own_events_div">
+                <table>
+                    <thead> <th class="span4">Name</th> <th class="span4">Time</th> </thead>
+                    <tbody id="own_events_table">
+                        
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="add_event_div">
+            <input type="button" value="add own event" id="add_event_btn"><br/>
+                <div id="add_event_container">
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+<p>
+  
+    
+
+    
+    <hr>
+    
   </div>
 </p>
 
 
 <script type="text/javascript">
     $(document).ready(function(){
-        //$('.modul_checkbox').prop('checked',false);
+        $('.modul_checkbox').prop('checked',false);
         $('.event_checkbox').prop('checked',false);
+
+        $('.content_elements_div').hide();
+        $('.content_elements').click(function(){ 
+            $( '#'+$(this).attr("id")+'_div').toggle();    
+        });
     });
 
+    
+
 	$('#select_semester').change(function() {
-        $(".table_div").css('display','block');
+        $(".table_div").show();
+        selected_events = new Set();
+        $(".event_checkbox").prop('checked',false);
+        $('tr.offer_modul').css("background-color","white");
+
 		var x = document.getElementById('select_semester');
 		for ( i = 0; i < x.options.length; i++) {
 			$('.offer_sem' + x[i].value).css('display', 'none');
+            $('.offer_sem' + x[i].value+"_events").css('display', 'none');
 		}
 		if ( $(this).val() != -1 ) {
 			$('.offer_sem' + $(this).val()).css('display', 'table-row');
-		}
+		}else{
+            $("#content_module_div").hide();
+        }
+        $("#content_module_div").show();
 	});
 
     
-    $('div.table_div > table').delegate('tr.offer_modul','click',function(){
+    $('div#content_module_div > table').delegate('tr.offer_modul','click',function(){ 
 		
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
@@ -163,7 +212,7 @@
         checkoverleap();
         setLink();
 	});*/
-    $('div.table_div > table').delegate('tr.offer_event','click',function(){
+    $('div#content_module_div > table').delegate('tr.offer_event','click',function(){
 
         if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
         {

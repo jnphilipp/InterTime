@@ -56,3 +56,21 @@ th,td {
 .table-day{display:table-row;}
 .rowh{border:solid 1px black;}
 .modcell{font-size: 10px;}
+.content_div{
+	margin:10px;
+	padding:15px;
+	border: solid 1px black;
+	border-radius: 15px;
+	background-color:whitesmoke;
+}
+thead tr{background-color:#8a8a8a;}
+.content_elements{
+	border-bottom:solid 1px black;
+	cursor:pointer;
+
+}
+.content_elements_div{
+	padding-left:5%;
+	padding-right:5%;
+	padding-top:15px;
+}
