@@ -5,6 +5,7 @@ body {
 	font-weight: normal;
 	color: black;
 	padding-top:40px;
+	padding-bottom:40px;
 }
 
 a {
@@ -26,7 +27,7 @@ a:active {
 
 table{border:solid 1px black;}
 
-tr.offer_modul{
+tr.offer_modul {
 	border:1px solid black;
 }
 tr.offer_modul td{
@@ -42,7 +43,7 @@ tr.offer_event:hover{
 }
 tr.offer_event td{
 	background-color: #e0e0e0;
-	border: solid 0px black;
+	
 }
 th,td {
 	padding-left: 10px;
@@ -55,3 +56,21 @@ th,td {
 .table-day{display:table-row;}
 .rowh{border:solid 1px black;}
 .modcell{font-size: 10px;}
+.content_div{
+	margin:10px;
+	padding:15px;
+	border: solid 1px black;
+	border-radius: 15px;
+	background-color:whitesmoke;
+}
+thead tr{background-color:#8a8a8a;}
+.content_elements{
+	border-bottom:solid 1px black;
+	cursor:pointer;
+
+}
+.content_elements_div{
+	padding-left:5%;
+	padding-right:5%;
+	padding-top:15px;
+}
