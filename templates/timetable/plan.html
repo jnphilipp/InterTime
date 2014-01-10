@@ -46,21 +46,22 @@
 			<option value="{{ semester.id }}">{{ semester.name }}</option>
 		{% endfor %}
 	</select>
+
     <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
 	<hr>
 </p>
 
 <p>
-  <div class="table_div container" style="display:none;">
+  <div class="table_div" style="display:none;">
     <h4>available moduls:</h4>
-	<table id="offering" >
+	<table id="offering" style="width:80%;">
 		<thead>
 			<tr>
-				<th class="span7">name</th>
-				<th class="span2">nummer</th>
-				<th class="span1">lp</th>
-				<th class="span1">type</th>
-				<th class="span2">description</th>
+				<th >name</th>
+				<th >nummer</th>
+				<th >lp</th>
+				<th >type</th>
+				<th >description</th>
 			</tr>
 		</thead>
 		<tbody id="offer_body">
@@ -89,6 +90,26 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+    
+    <hr>
+    <span>Own Events:</span>
+    <div id="own_events_div">
+        <table>
+            <thead> <th class="span4">Name</th> <th class="span4">Time</th> </thead>
+            <tbody id="own_events_table">
+                
+            </tbody>
+        </table>
+
+    </div>
+    <div class="add_event_div">
+    <input type="button" value="add own event" id="add_event_btn"><br/>
+        <div id="add_event_container">
+        </div>
+
+        
+    </div>
   </div>
 </p>
 
@@ -198,5 +219,36 @@
             }
         }
     }
+    var ownevents=0;
+    $('#add_event_btn').click(function(){
+        $('#add_event_container').empty();
+        var day ="<select id='add_own_day'> <option value='0'>Mo</option> <option value='1'>Di</option> <option value='2'>Mi</option> <option value='3'>Do</option> <option value='4'>Fr</option> <option value='5'>Sa</option> <option value='6'>So</option></select>";
+        var h="";
+        for(var i=7;i<23;i++){h+="<option value='"+i+"'>"+i+"</option>"}
+        var m="";
+        for(var j=0;j<60;j+=5){if(j<10){m+="<option value='0"+j+"'>0"+j+"</option>"}else{m+="<option value='"+j+"'>"+j+"</option>"}}
+        var fromhour ="<select id='add_own_beginh' > "+h+" </select>";
+        var frommin ="<select id='add_own_beginm'> "+m+" </select>";
+        var tohour ="<select id='add_own_endh'> "+h+" </select>";
+        var tomin ="<select id='add_own_endm'> "+m+" </select>";
+
+        $('#add_event_container').append( "<div id='owne' class='container' style='border:solid 1px black;padding:25px;'></div>" );
+
+        $('#owne').append( "<span class='span2'>Name:</span> <input  id='add_own_name' type='text' value='Name'> <br/>" );
+        $('#owne').append( "<span class='span2'>Day:</span>"+day+"<br/>" );
+        $('#owne').append( "<span class='span2'>Begin</span>"+fromhour+frommin+"<br/>" );
+        $('#owne').append( "<span class='span2'>End</span>"+tohour+tomin+"<br/>" );
+        $('#owne').append( "<input type='button' id='add_own_event' value='add'>" );
+        ownevents++;
+
+        $('#add_own_event').click(function(){
+            var time= $('#add_own_day option:selected').text()+': '+$('#add_own_beginh option:selected').text()+':'+$('#add_own_beginm option:selected').text()+'-'+$('#add_own_endh option:selected').text()+':'+$('#add_own_endm option:selected').text();
+            $('#own_events_table').append( '<tr><td>'+$('#add_own_name').val()+'</td><td>' + time + '</td></tr>');
+            $('#add_event_container').empty();
+        });
+    });
+
+     
+
 </script>
 {% endblock %}
