@@ -38,18 +38,19 @@ def timetable(request):
 		title = '%s (%s - %s)' % (event.name, event.begin, event.end)
 		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 7) + (event.begin.minute / 60.0), hours + minutes, title, title))
 
-	own_events = request.GET.get('own').split('#')
-	for oevent in own_events:
-		if not oevent:
-			name,day,begin,end = oevent.split(';')
-			beginh,beginm = begin.split(':')
-			endh,endm = end.split(':')
+	# not working yet
+	#own_events = request.GET.get('own').split('#')
+	#for oevent in own_events:
+	#	if not oevent:
+	#		name,day,begin,end = oevent.split(';')
+	#		beginh,beginm = begin.split(':')
+	#		endh,endm = end.split(':')
 
-			duration = timedelta(hours=endh - beginh, minutes=endm - beginm)
-			seconds = duration.total_seconds()
-			hours = seconds // 3600
-			minutes = (seconds % 3600) // 60 / 60
-			title = '%s (%s - %s)' % (name, begin, end)
-			event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (123, day, (beginh - 7) + (beginm / 60.0), hours + minutes, title, title))		
+	#		duration = timedelta(hours=endh - beginh, minutes=endm - beginm)
+	#		seconds = duration.total_seconds()
+	#		hours = seconds // 3600
+	#		minutes = (seconds % 3600) // 60 / 60
+	#		title = '%s (%s - %s)' % (name, begin, end)
+	#		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (123, day, (beginh - 7) + (beginm / 60.0), hours + minutes, title, title))		
 			
 	return render(request, 'timetable/timetable.html', locals())

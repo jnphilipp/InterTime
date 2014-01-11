@@ -237,7 +237,6 @@
             $('.'+ $(this).attr('id')).prop('checked', false);
 		}
         checkoverleap();
-        setLink();
 	});
     /*
 	$('.event_checkbox').click(function() {
@@ -262,7 +261,6 @@
             selected_events.remove($( '#'+$(this).attr('id')+'_checkbox').val());
         }
         checkoverleap();
-        setLink();
     });
     function setLink()
     {
@@ -318,6 +316,7 @@
                 } 
             }
         }
+        setLink();
     }
 
 
@@ -357,6 +356,7 @@
             
             var e = new evt(begin,end,day,id,modul);
             ownevents[ownevents.length]=e;
+            checkoverleap();
         });
     });
 
