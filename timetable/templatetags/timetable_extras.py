@@ -1,6 +1,5 @@
 from django.template import Library
-from timetable.models import Modul
-
+from timetable.models import Modul, SportkursEvent
 register = Library()
 
 @register.filter
@@ -25,6 +24,10 @@ def convert_weekday(weekday):
 @register.filter
 def module(semester):
 	return Modul.objects.all().order_by('name').filter(event__semester=semester).filter(number__isnull=False).distinct()
+
+@register.filter
+def spmodule(name):
+	return SportkursEvent.objects.all().order_by('kurs').filter(kurs__name=name).filter(id__isnull=False).distinct()
 
 @register.filter
 def events(modul, semester):
