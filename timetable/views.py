@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from timetable.models import Department, Event, Modul, Semester
+from timetable.models import Department, Event, Modul, Semester, Sportkurs
 
 def index(request):
 	return render(request, 'index.html')
@@ -23,6 +23,7 @@ def department_details(request, department_id):
 
 def plan(request):
 	semesters = Semester.objects.all().order_by('name')
+	kurse = Sportkurs.objects.all().order_by('name')
 	return render(request, 'timetable/plan.html', locals())
 
 def timetable(request):
