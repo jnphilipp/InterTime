@@ -151,6 +151,7 @@ class HSS(BaseParser):
 							if created or not kurs.description:
 								kurs.description = informationen.group(3)
 								kurs.instructor = instructor
+								kurs.save()
 
 							events = re.finditer(r'bs_sdet(.+?)(?=bs_sbuch)', informationen.group(4), flags=re.M|re.S)
 							for index4 in events:
