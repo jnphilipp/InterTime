@@ -35,6 +35,7 @@
 
 	var module= {mods:[{},]};
 	var selected_events = new Set();
+	var selected_kurs = new Set();
 </script>
 
 <div id="sidebar" style="position:fixed;">
@@ -144,14 +145,18 @@
                         <tbody id="sport_body">
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
-                            <tr class="sport_kurs{{ kurs.id }} sport sport_modul" id="{{ modul.kurs }}">
+                            <tr class="sport_kurs{{ kurs.id }} sport offer_modul" id="{{ modul.kurs }}">
 				<td id="{{ modul.id }}_namefield" class="modul_names" style="padding-left:25px;"><input type="checkbox" id="{{ kurs.name }}_{{ modul.id }}_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.name }}</td>
-                                <td>{{ modul.kurs }}</td>
+				<td>{{ modul.kurs }}</td>
                                 <td>{{ modul.weekday|convert_weekday }}</td>
                                 <td>{{ modul.begin}}</td>
                                 <td>{{ modul.end}}</td>
                                 <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
-				
+				<input type="hidden" id="{{ modul.id }}_begin" value="{{ modul.begin }}" >
+                                <input type="hidden" id="{{ modul.id }}_end" value="{{ modul.end }}" >
+                                <input type="hidden" id="{{ modul.id }}_day" value="{{ modul.weekday }}" >
+                                <input type="hidden" id="{{ modul.id }}_kurs" value="{{ modul.kurs }}" >
+                                <input type="hidden" id="{{ modul.id }}_weekday" value="{{ modul.weekday|convert_weekday }}" >
                             </tr>
                                 {% endfor %}
                             {% endfor %}
@@ -253,6 +258,16 @@
         checkoverleap();
         setLink();
 	});*/
+	$('.modul_checkbox').click(function() {
+		if ( this.checked ) {
+			selected_kurs.add("sp"+$(this).val());
+		}
+		else {
+			selected_kurs.remove("sp"+$(this).val());
+		}
+	});
+
+
     $('div#content_module_div > table').delegate('tr.offer_event','click',function(){
 
         if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
@@ -269,8 +284,9 @@
     function setLink()
     {
         var site  = '{% url 'timetable' %}'
-
+	var hss = '&hss=';
         var own = '&own=';
+	
         for(var i=0;i<ownevents.length;i++){
             own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+'#';
         }
