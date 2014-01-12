@@ -130,23 +130,27 @@
                 <h3><p class="content_elements" id="content_hss">Highschool sport:</p></h3>
                 <div class="content_elements_div" id="content_hss_div">
 
-                    <table>
+                    <table rules ="rows">
                         <thead>
                             <tr>
+                                <td></td>
                                 <td>name</td>
                                 <td>tag</td>
                                 <td>begin</td>
                                 <td>end</td>
+                                <td>description</td>
                             </tr>
                         </thead>
                         <tbody id="sport_body">
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
                             <tr class="sport_kurs{{ kurs.id }} sport sport_modul" id="{{ modul.kurs }}">
-				<td>{{ modul.kurs }}</td>
+				<td id="{{ modul.id }}_namefield" class="modul_names" style="padding-left:25px;"><input type="checkbox" id="{{ kurs.name }}_{{ modul.id }}_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.name }}</td>
+                                <td>{{ modul.kurs }}</td>
                                 <td>{{ modul.weekday|convert_weekday }}</td>
                                 <td>{{ modul.begin}}</td>
                                 <td>{{ modul.end}}</td>
+                                <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
 				
                             </tr>
                                 {% endfor %}
