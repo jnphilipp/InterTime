@@ -62,7 +62,7 @@
         </div>
 
         <div style="border:solid 1px black;border-radius:5px;padding:5px;margin-left:5%;margin-right:5%;">
-            <p>Selected Moduls:</p>
+            <p>Selected Events:</p>
             <ul id="sidebar_selected">
 
             </ul>    
@@ -86,7 +86,7 @@
                 <h3><p class="content_elements" id="content_module">Module: </p></h3>
                 <div class="content_elements_div" id="content_module_div">
 
-                    <table id="offering" style="width:90%;">
+                    <table rules ="rows" id="offering" style="width:90%;">
                         <thead>
                             <tr>
                                 <th >name</th>
@@ -145,18 +145,18 @@
                         <tbody id="sport_body">
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
-                            <tr class="sport_kurs{{ kurs.id }} sport offer_modul" id="{{ modul.kurs }}">
-				<td id="{{ modul.id }}_namefield" class="modul_names" style="padding-left:25px;"><input type="checkbox" id="{{ kurs.name }}_{{ modul.id }}_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.name }}</td>
+                            <tr class="sport offer_event" id="{{ modul.id }}_hss">
+				<td id="{{ modul.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.name }}</td>
 				<td>{{ modul.kurs }}</td>
                                 <td>{{ modul.weekday|convert_weekday }}</td>
                                 <td>{{ modul.begin}}</td>
                                 <td>{{ modul.end}}</td>
                                 <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
-				<input type="hidden" id="{{ modul.id }}_begin" value="{{ modul.begin }}" >
-                                <input type="hidden" id="{{ modul.id }}_end" value="{{ modul.end }}" >
-                                <input type="hidden" id="{{ modul.id }}_day" value="{{ modul.weekday }}" >
-                                <input type="hidden" id="{{ modul.id }}_kurs" value="{{ modul.kurs }}" >
-                                <input type="hidden" id="{{ modul.id }}_weekday" value="{{ modul.weekday|convert_weekday }}" >
+				<input type="hidden" id="{{ modul.id }}_hss_begin" value="{{ modul.begin }}" >
+                                <input type="hidden" id="{{ modul.id }}_hss_end" value="{{ modul.end }}" >
+                                <input type="hidden" id="{{ modul.id }}_hss_day" value="{{ modul.weekday }}" >
+                                <input type="hidden" id="{{ modul.id }}_hss_name" value="{{ modul.kurs }}" >
+                                <input type="hidden" id="{{ modul.id }}_hss_weekday" value="{{ modul.weekday|convert_weekday }}" >
                             </tr>
                                 {% endfor %}
                             {% endfor %}
@@ -258,17 +258,17 @@
         checkoverleap();
         setLink();
 	});*/
-	$('.modul_checkbox').click(function() {
+	/*$('.modul_checkbox').click(function() {
 		if ( this.checked ) {
 			selected_kurs.add("sp"+$(this).val());
 		}
 		else {
 			selected_kurs.remove("sp"+$(this).val());
 		}
-	});
+	});*/
 
 
-    $('div#content_module_div > table').delegate('tr.offer_event','click',function(){
+    $('div#content_module_div > table ').delegate('tr.offer_event','click',function(){
 
         if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
         {
@@ -281,17 +281,33 @@
         }
         checkoverleap();
     });
+
+ 		$('div#content_hss_div > table ').delegate('tr.offer_event','click',function(){
+
+        if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
+        {
+            $( '#'+$(this).attr('id')+'_checkbox').prop('checked',true);
+            selected_kurs.add($( '#'+$(this).attr('id')+'_checkbox').val());
+        }
+        else{
+            $( '#'+$(this).attr('id')+'_checkbox').prop('checked',false);   
+            selected_kurs.remove($( '#'+$(this).attr('id')+'_checkbox').val());
+        }
+        checkoverleap();
+    });
+
+
     function setLink()
     {
         var site  = '{% url 'timetable' %}'
-	var hss = '&hss=';
+		var hss = '&hss='+selected_kurs.values();
         var own = '&own=';
 	
         for(var i=0;i<ownevents.length;i++){
             own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+'#';
         }
 
-        document.getElementById('link_timetable').href = site + '?events=' + selected_events.values() + own;
+        document.getElementById('link_timetable').href = site + '?events=' + selected_events.values() + own + hss;
     }
 
 
@@ -305,10 +321,13 @@
 
     function checkoverleap()
     {
+    	//clear sidebar
         $('#sidebar_selected').empty();
-        var evts = selected_events.values();
-        var events =new Array();
         $('.event_names').css('color','black');
+
+        // read selected informatik events
+        var events =new Array();
+        var evts = selected_events.values();
         for(i=0;i<evts.length;i++){
             var begin = document.getElementById(evts[i]+'_begin').value;
             var end = document.getElementById(evts[i]+'_end').value;
@@ -323,6 +342,26 @@
             $('#'+evts[i]+'_sidebar').css('color','green');
             
         }
+
+        // read selected sport  events
+        var hss_events =new Array();
+        var hss_evts = selected_kurs.values();
+        for(i=0;i<hss_evts.length;i++){
+            var begin = document.getElementById(hss_evts[i]+'_hss_begin').value;
+            var end = document.getElementById(hss_evts[i]+'_hss_end').value;
+            var day = document.getElementById(hss_evts[i]+'_hss_day').value;
+            var modul= document.getElementById(hss_evts[i]+'_hss_name').value;
+            var weekday = document.getElementById(hss_evts[i]+'_hss_weekday').value;
+            var eventname = document.getElementById(hss_evts[i]+'_hss_name').value;
+            $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
+            var e = new evt(begin,end,day,evts[i],modul);
+            hss_events[i]=e;
+            
+            $('#'+hss_evts[i]+'_namefield').css('color','green');
+            $('#'+hss_evts[i]+'_sidebar').css('color','green');
+        }
+
+        //overleap ifi events
         for(i=0;i<events.length;i++){
             for(j=i;j<events.length;j++){
                 if(i==j){continue;}
@@ -336,6 +375,23 @@
                 } 
             }
         }
+        
+        //overleap ifi events
+        for(i=0;i<events.length;i++){
+            for(j=i;j<events.length;j++){
+                if(i==j){continue;}
+                if(events[i].day != events[j].day){continue;}
+
+                if(events[i].begin >= events[j].begin && events[i].begin < events[j].end){
+                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+evts[j]+'_namefield').css('color','red');
+                    $('#'+evts[i]+'_sidebar').css('color','red');
+                    $('#'+evts[j]+'_sidebar').css('color','red');
+                } 
+            }
+        }
+
+
         setLink();
     }
 
