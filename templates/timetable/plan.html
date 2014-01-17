@@ -134,7 +134,6 @@
                     <table rules ="rows">
                         <thead>
                             <tr>
-                                <td></td>
                                 <td>name</td>
                                 <td>tag</td>
                                 <td>begin</td>
@@ -146,13 +145,12 @@
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
                             <tr class="sport offer_event" id="{{ modul.id }}_hss">
-				<td id="{{ modul.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.name }}</td>
-				<td>{{ modul.kurs }}</td>
+				<td id="{{ modul.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.kurs }}</td>
                                 <td>{{ modul.weekday|convert_weekday }}</td>
                                 <td>{{ modul.begin}}</td>
                                 <td>{{ modul.end}}</td>
                                 <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
-				<input type="hidden" id="{{ modul.id }}_hss_begin" value="{{ modul.begin }}" >
+								<input type="hidden" id="{{ modul.id }}_hss_begin" value="{{ modul.begin }}" >
                                 <input type="hidden" id="{{ modul.id }}_hss_end" value="{{ modul.end }}" >
                                 <input type="hidden" id="{{ modul.id }}_hss_day" value="{{ modul.weekday }}" >
                                 <input type="hidden" id="{{ modul.id }}_hss_name" value="{{ modul.kurs }}" >
@@ -353,12 +351,12 @@
             var modul= document.getElementById(hss_evts[i]+'_hss_name').value;
             var weekday = document.getElementById(hss_evts[i]+'_hss_weekday').value;
             var eventname = document.getElementById(hss_evts[i]+'_hss_name').value;
-            $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
+            $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_hss_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
             var e = new evt(begin,end,day,evts[i],modul);
             hss_events[i]=e;
             
-            $('#'+hss_evts[i]+'_namefield').css('color','green');
-            $('#'+hss_evts[i]+'_sidebar').css('color','green');
+            $('#'+hss_evts[i]+'_hss_namefield').css('color','green');
+            $('#'+hss_evts[i]+'_hss_sidebar').css('color','green');
         }
 
         //overleap ifi events
@@ -375,23 +373,26 @@
                 } 
             }
         }
+
+        //overleap sport events
+        for(i=0;i<hss_events.length;i++){
+            for(j=i;j<hss_events.length;j++){
+                if(i==j){continue;}
+                if(hss_events[i].day != hss_events[j].day){continue;}
+
+                if(hss_events[i].begin >= hss_events[j].begin && hss_events[i].begin < hss_events[j].end){
+                    $('#'+hss_evts[i]+'_hss_namefield').css('color','red');
+                    $('#'+hss_evts[j]+'_hss_namefield').css('color','red');
+                    $('#'+hss_evts[i]+'_hss_sidebar').css('color','red');
+                    $('#'+hss_evts[j]+'_hss_sidebar').css('color','red');
+                } 
+            }
+        }
+
         
-        //overleap ifi events
-        for(i=0;i<events.length;i++){
-            for(j=i;j<events.length;j++){
-                if(i==j){continue;}
-                if(events[i].day != events[j].day){continue;}
-
-                if(events[i].begin >= events[j].begin && events[i].begin < events[j].end){
-                    $('#'+evts[i]+'_namefield').css('color','red');
-                    $('#'+evts[j]+'_namefield').css('color','red');
-                    $('#'+evts[i]+'_sidebar').css('color','red');
-                    $('#'+evts[j]+'_sidebar').css('color','red');
-                } 
-            }
-        }
 
 
+        //update post
         setLink();
     }
 
