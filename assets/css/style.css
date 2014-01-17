@@ -34,7 +34,7 @@ tr.offer_modul td{
 	padding-top:3px;
 	padding-bottom:3px;
 }
-tr.offer_modul:hover{
+tr.hoover:hover td{
 	background-color: #FFEC8B;
 	cursor:pointer;
 }

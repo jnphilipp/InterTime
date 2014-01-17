@@ -99,7 +99,7 @@
                         <tbody id="offer_body">
                             {% for semester in semesters %}
                                 {% for modul in semester|module %}
-                                    <tr class="offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}" >
+                                    <tr class="hoover offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}" >
                                         <td>{{ modul.name }}</td>
                                         <td>{{ modul.number }}</td>
                                         <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
@@ -144,7 +144,7 @@
                         <tbody id="sport_body">
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
-                            <tr class="sport offer_event" id="{{ modul.id }}_hss">
+                            <tr class="sport offer_event hoover" id="{{ modul.id }}_hss">
 				<td id="{{ modul.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.kurs }}</td>
                                 <td>{{ modul.weekday|convert_weekday }}</td>
                                 <td>{{ modul.begin}}</td>
