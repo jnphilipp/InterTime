@@ -265,7 +265,7 @@
 		}
 	});*/
 
-
+	//select ifi events
     $('div#content_module_div > table ').delegate('tr.offer_event','click',function(){
 
         if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
@@ -280,7 +280,8 @@
         checkoverleap();
     });
 
- 		$('div#content_hss_div > table ').delegate('tr.offer_event','click',function(){
+    //select hss events
+ 	$('div#content_hss_div > table ').delegate('tr.offer_event','click',function(){
 
         if( $( '#'+$(this).attr('id')+'_checkbox').prop('checked') == false)
         {
@@ -292,8 +293,9 @@
             selected_kurs.remove($( '#'+$(this).attr('id')+'_checkbox').val());
         }
         checkoverleap();
-    });
 
+
+    });
 
     function setLink()
     {
@@ -389,7 +391,20 @@
             }
         }
 
-        
+        // overleap ifi-sport
+        //overleap sport events
+        for(i=0;i<events.length;i++){
+            for(j=0;j<hss_events.length;j++){
+                if(events[i].day != hss_events[j].day){continue;}
+
+                if(events[i].begin >= hss_events[j].begin && events[i].begin < hss_events[j].end ){ 
+                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+hss_evts[j]+'_hss_namefield').css('color','red');
+                    $('#'+evts[i]+'_sidebar').css('color','red');
+                    $('#'+hss_evts[j]+'_hss_sidebar').css('color','red');
+                } 
+            }
+        }
 
 
         //update post
@@ -426,13 +441,24 @@
             var day=$('#add_own_day option:selected').text();
             var id=10000-ownevents.length;
             var modul=$('#add_own_name').val();
+            var eventid=ownevents.length;
 
-            $('#own_events_table').append( '<tr><td>'+$('#add_own_name').val()+'</td><td>' + day + ': ' + begin + '-' + end + '</td></tr>');
+            
+            var post = '<tr class="offer_event" id="'+eventid+'">';
+            	post+='<td id="'+eventid+'_own_namefield" class="event_names" style="padding-left:25px;">';
+            		post+=modul;
+            	post+='</td>';
+            	post+='<td>' + day + ': ' + begin + '-' + end + '</td>';
+            post+='</tr>';
+            $('#own_events_table').append( post);
+            
+            
             $('#add_event_container').empty();
 
             
             var e = new evt(begin,end,day,id,modul);
             ownevents[ownevents.length]=e;
+
             checkoverleap();
         });
     });
