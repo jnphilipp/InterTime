@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from timetable.models import Department, Event, Modul, Semester, Sportkurs
+from timetable.models import Department, Event, Modul, Semester, Sportkurs, SportkursEvent
 
 def index(request):
 	return render(request, 'index.html')
@@ -37,6 +37,17 @@ def timetable(request):
 		minutes = (seconds % 3600) // 60 / 60
 		title = '%s (%s - %s)' % (event.name, event.begin, event.end)
 		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 7) + (event.begin.minute / 60.0), hours + minutes, title, title))
+
+	reqhss = request.GET.get('hss')
+	hssevents = SportkursEvent.objects.filter(id__in=reqhss.split(',') if reqhss else '').filter(weekday__isnull=False).order_by('weekday')
+	for event in hssevents:
+		duration = timedelta(hours=event.end.hour - event.begin.hour, minutes=event.end.minute - event.begin.minute)
+		seconds = duration.total_seconds()
+		hours = seconds // 3600
+		minutes = (seconds % 3600) // 60 / 60
+		title = '%s (%s - %s)' % (event.kurs, event.begin, event.end)
+		event_list.append('<li class="tt-event btn-success" data-id="%s" data-day="%s" data-start="%s" data-duration="%s" rel="tooltip" unselectable="on" style="-moz-user-select: none; height: 36px; top: 224px; left: 0px; width: 414px;" data-original-title="%s">%s</li>' % (event.id, event.weekday, (event.begin.hour - 7) + (event.begin.minute / 60.0), hours + minutes, title, title))
+
 
 	# not working yet
 	#own_events = request.GET.get('own').split('#')
