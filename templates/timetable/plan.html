@@ -144,18 +144,20 @@
                         <tbody id="sport_body">
                             {% for kurs in kurse %}
                                 {% for modul in kurs|spmodule %}
-                            <tr class="sport offer_event hoover" id="{{ modul.id }}_hss">
-				<td id="{{ modul.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ modul.id }}"> {{ modul.kurs }}</td>
-                                <td>{{ modul.weekday|convert_weekday }}</td>
-                                <td>{{ modul.begin}}</td>
-                                <td>{{ modul.end}}</td>
-                                <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
-								<input type="hidden" id="{{ modul.id }}_hss_begin" value="{{ modul.begin }}" >
-                                <input type="hidden" id="{{ modul.id }}_hss_end" value="{{ modul.end }}" >
-                                <input type="hidden" id="{{ modul.id }}_hss_day" value="{{ modul.weekday }}" >
-                                <input type="hidden" id="{{ modul.id }}_hss_name" value="{{ modul.kurs }}" >
-                                <input type="hidden" id="{{ modul.id }}_hss_weekday" value="{{ modul.weekday|convert_weekday }}" >
-                            </tr>
+                                	{% for events in kurs|spevents %}
+                            			<tr class="sport offer_event hoover" id="{{ events.id }}_hss">
+											<td id="{{ events.id }}_hss_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ events.id }}_hss_checkbox" class="modul_checkbox {{ kurs.kurs }}" name="modul" value="{{ events.id }}"> {{ modul.kurs }}</td>
+			                                <td>{{ modul.weekday|convert_weekday }}</td>
+			                                <td>{{ modul.begin}}</td>
+			                                <td>{{ modul.end}}</td>
+			                                <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
+											<input type="hidden" id="{{ events.id }}_hss_begin" value="{{ events.begin }}" >
+			                                <input type="hidden" id="{{ events.id }}_hss_end" value="{{ events.end }}" >
+			                                <input type="hidden" id="{{ events.id }}_hss_day" value="{{ events.weekday }}" >
+			                                <input type="hidden" id="{{ events.id }}_hss_name" value="{{ events.kurs }}" >
+			                                <input type="hidden" id="{{ events.id }}_hss_weekday" value="{{ events.weekday|convert_weekday }}" >
+		                            	</tr>
+		                            {% endfor %}
                                 {% endfor %}
                             {% endfor %}
                         </tbody>
@@ -292,6 +294,7 @@
             $( '#'+$(this).attr('id')+'_checkbox').prop('checked',false);   
             selected_kurs.remove($( '#'+$(this).attr('id')+'_checkbox').val());
         }
+        alert($( '#'+$(this).attr('id')+'_checkbox').val());
         checkoverleap();
 
 

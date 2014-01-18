@@ -32,3 +32,7 @@ def spmodule(name):
 @register.filter
 def events(modul, semester):
 	return modul.event_set.filter(semester=semester)
+
+@register.filter
+def spevents(name):
+	return SportkursEvent.objects.all().order_by('kurs').filter(kurs__name=name).filter(id__isnull=False).distinct()
