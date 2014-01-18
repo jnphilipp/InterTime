@@ -366,7 +366,7 @@
         for(i=0;i<events.length;i++){
             for(j=i;j<events.length;j++){
                 if(i==j){continue;}
-                if(events[i].day != events[j].day){continue;}
+                if(events[i].day != events[j].day || events[i].day == 'None'){continue;}
 
                 if(events[i].begin >= events[j].begin && events[i].begin < events[j].end){
                     $('#'+evts[i]+'_namefield').css('color','red');
