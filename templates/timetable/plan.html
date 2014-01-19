@@ -305,7 +305,7 @@
         var own = '&own=';
 	
         for(var i=0;i<ownevents.length;i++){
-            own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+'#';
+            own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+';';
         }
 
         document.getElementById('link_timetable').href = site + '?events=' + selected_events.values() + own + hss;
@@ -368,7 +368,7 @@
                 if(i==j){continue;}
                 if(events[i].day != events[j].day || events[i].day == 'None'){continue;}
 
-                if(events[i].begin >= events[j].begin && events[i].begin < events[j].end){
+                if( between(events[i].begin, events[j].begin,events[j].end) || between(events[j].begin, events[i].begin,events[i].end)){
                     $('#'+evts[i]+'_namefield').css('color','red');
                     $('#'+evts[j]+'_namefield').css('color','red');
                     $('#'+evts[i]+'_sidebar').css('color','red');
@@ -383,7 +383,7 @@
                 if(i==j){continue;}
                 if(hss_events[i].day != hss_events[j].day){continue;}
 
-                if(hss_events[i].begin >= hss_events[j].begin && hss_events[i].begin < hss_events[j].end){
+                if( between(hss_events[i].begin, hss_events[j].begin,hss_events[j].end) || between(hss_events[j].begin, hss_events[i].begin,hss_events[i].end) ){
                     $('#'+hss_evts[i]+'_hss_namefield').css('color','red');
                     $('#'+hss_evts[j]+'_hss_namefield').css('color','red');
                     $('#'+hss_evts[i]+'_hss_sidebar').css('color','red');
@@ -393,12 +393,11 @@
         }
 
         // overleap ifi-sport
-        //overleap sport events
         for(i=0;i<events.length;i++){
             for(j=0;j<hss_events.length;j++){
                 if(events[i].day != hss_events[j].day){continue;}
 
-                if(events[i].begin >= hss_events[j].begin && events[i].begin < hss_events[j].end ){ 
+                if( between(hss_events[j].begin,events[i].begin,events[i].end) || between(events[i].begin,hss_events[j].begin,hss_events[j].end) ){
                     $('#'+evts[i]+'_namefield').css('color','red');
                     $('#'+hss_evts[j]+'_hss_namefield').css('color','red');
                     $('#'+evts[i]+'_sidebar').css('color','red');
@@ -412,6 +411,11 @@
         setLink();
     }
 
+    function between(val,from,to)
+    {
+    	if(val >= from && val < to){return true;} 
+    	return false;
+    }
 
     
     $('#add_event_btn').click(function(){
@@ -440,6 +444,7 @@
             var begin=$('#add_own_beginh option:selected').text()+':'+$('#add_own_beginm option:selected').text();
             var end=$('#add_own_endh option:selected').text()+':'+$('#add_own_endm option:selected').text();
             var day=$('#add_own_day option:selected').text();
+            var dayi=$('#add_own_day option:selected').val();
             var id=10000-ownevents.length;
             var modul=$('#add_own_name').val();
             var eventid=ownevents.length;
@@ -457,7 +462,7 @@
             $('#add_event_container').empty();
 
             
-            var e = new evt(begin,end,day,id,modul);
+            var e = new evt(begin,end,dayi,id,modul);
             ownevents[ownevents.length]=e;
 
             checkoverleap();
