@@ -305,7 +305,7 @@
         var own = '&own=';
 	
         for(var i=0;i<ownevents.length;i++){
-            own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+'#';
+            own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+';';
         }
 
         document.getElementById('link_timetable').href = site + '?events=' + selected_events.values() + own + hss;
@@ -440,6 +440,7 @@
             var begin=$('#add_own_beginh option:selected').text()+':'+$('#add_own_beginm option:selected').text();
             var end=$('#add_own_endh option:selected').text()+':'+$('#add_own_endm option:selected').text();
             var day=$('#add_own_day option:selected').text();
+            var dayi=$('#add_own_day option:selected').val();
             var id=10000-ownevents.length;
             var modul=$('#add_own_name').val();
             var eventid=ownevents.length;
@@ -457,7 +458,7 @@
             $('#add_event_container').empty();
 
             
-            var e = new evt(begin,end,day,id,modul);
+            var e = new evt(begin,end,dayi,id,modul);
             ownevents[ownevents.length]=e;
 
             checkoverleap();
