@@ -36,8 +36,8 @@
 	var module= {mods:[{},]};
 	var selected_events = new Set();
 	var selected_kurs = new Set();
+	var selected_own = new Set();
 </script>
-
 <div id="sidebar" style="position:fixed;">
     <div style="background-color:whitesmoke;padding-bottom:100px;padding-top:20px;">
         <div id="sidebar_title"  style="margin-bottom:30px;">
@@ -61,6 +61,10 @@
             </div>
         </div>
 
+        <div id="plan_top_displaytt"  style="margin:10px;margin-top:25px;">
+            <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+        </div>
+
         <div style="border:solid 1px black;border-radius:5px;padding:5px;margin-left:5%;margin-right:5%;">
             <p>Selected Events:</p>
             <ul id="sidebar_selected">
@@ -68,10 +72,6 @@
             </ul>    
         </div>
 
-        <div id="plan_top_displaytt"  style="margin:10px;margin-top:25px;">
-            <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
-        </div>
-        
     </div>
 </div>
 
@@ -188,12 +188,8 @@
 </div>
 
 
-
-
-
-
-
 <script type="text/javascript">
+	//reset selection
     $(document).ready(function(){
         $('.modul_checkbox').prop('checked',false);
         $('.event_checkbox').prop('checked',false);
@@ -205,7 +201,7 @@
     });
 
     
-
+    //load semester event data
 	$('#select_semester').change(function() {
         $(".table_div").show();
         selected_events = new Set();
@@ -225,7 +221,7 @@
         $("#content_module_div").show();
 	});
 
-    
+    // show/hide event for this module
     $('div#content_module_div > table').delegate('tr.offer_modul','click',function(){ 
 		
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
@@ -245,26 +241,7 @@
 		}
         checkoverleap();
 	});
-    /*
-	$('.event_checkbox').click(function() {
-		if ( this.checked ) {
-			selected_events.add($(this).val());
-		}
-		else {
-			selected_events.remove($(this).val());
-		}
-        checkoverleap();
-        setLink();
-	});*/
-	/*$('.modul_checkbox').click(function() {
-		if ( this.checked ) {
-			selected_kurs.add("sp"+$(this).val());
-		}
-		else {
-			selected_kurs.remove("sp"+$(this).val());
-		}
-	});*/
-
+    
 	//select ifi events
     $('div#content_module_div > table ').delegate('tr.offer_event','click',function(){
 
@@ -292,12 +269,10 @@
             $( '#'+$(this).attr('id')+'_checkbox').prop('checked',false);   
             selected_kurs.remove($( '#'+$(this).attr('id')+'_checkbox').val());
         }
-        //alert($( '#'+$(this).attr('id')+'_checkbox').val());
         checkoverleap();
-
-
     });
 
+ 	//update postdata
     function setLink()
     {
         var site  = '{% url 'timetable' %}'
@@ -320,6 +295,7 @@
         this.modul=modul;
     }
 
+    //checking und styling overleap for selected events
     function checkoverleap()
     {
     	//clear sidebar
@@ -362,6 +338,14 @@
             $('#'+hss_evts[i]+'_hss_sidebar').css('color','green');
         }
 
+        //own events
+        var own_evts = selected_own.values();
+        for(i=0;i<own_evts.length;i++){
+        	$('#sidebar_selected').append('<li id="'+ownevents[own_evts[i]].id+'_own_sidebar">'+ownevents[own_evts[i]].modul.substring(0,25)+'.. <br>('+ownevents[own_evts[i]].day+': '+ownevents[own_evts[i]].begin+'-'+ownevents[own_evts[i]].end+')</li>');   
+        	$('#'+ownevents[own_evts[i]].id+'_own_namefield').css('color','green');
+            $('#'+ownevents[own_evts[i]].id+'_own_sidebar').css('color','green');	
+        }
+
         //overleap ifi events
         for(i=0;i<events.length;i++){
             for(j=i;j<events.length;j++){
@@ -391,6 +375,20 @@
                 } 
             }
         }
+        //overleap own events
+        for(i=0;i<own_evts.length;i++){
+        	for(j=i;j<own_evts.length;j++){
+        		if(i==j){continue;}
+                if(ownevents[own_evts[i]].day != ownevents[own_evts[j]].day){continue;}
+                if( between(ownevents[own_evts[i]].begin, ownevents[own_evts[j]].begin,ownevents[own_evts[j]].end) || between(ownevents[own_evts[j]].begin, ownevents[own_evts[i]].begin,ownevents[own_evts[i]].end) ){
+                    $('#'+ownevents[own_evts[i]].id+'_own_namefield').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_namefield').css('color','red');
+                    $('#'+ownevents[own_evts[i]].id+'_own_sidebar').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_sidebar').css('color','red');
+                } 
+        		
+        	}
+        }
 
         // overleap ifi-sport
         for(i=0;i<events.length;i++){
@@ -405,19 +403,46 @@
                 } 
             }
         }
+        // overleap ifi-own
+        for(i=0;i<events.length;i++){
+            for(j=0;j<own_evts.length;j++){
+            	if(events[i].day != ownevents[own_evts[j]].day){continue;}
 
+                if( between(ownevents[own_evts[j]].begin,events[i].begin,events[i].end) || between(events[i].begin,ownevents[own_evts[j]].begin,ownevents[own_evts[j]].end) ){
+                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_namefield').css('color','red');
+                    $('#'+evts[i]+'_sidebar').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_sidebar').css('color','red');
+                } 
+            }
+        }
 
-        //update post
+        // overleap sport-own
+        for(i=0;i<hss_events.length;i++){
+            for(j=0;j<own_evts.length;j++){
+            	if(hss_events[i].day != ownevents[own_evts[j]].day){continue;}
+
+                if( between(ownevents[own_evts[j]].begin,hss_events[i].begin,hss_events[i].end) || between(hss_events[i].begin,ownevents[own_evts[j]].begin,ownevents[own_evts[j]].end) ){
+                    $('#'+hss_evts[i]+'_hss_namefield').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_namefield').css('color','red');
+                    $('#'+hss_evts[i]+'_hss_sidebar').css('color','red');
+                    $('#'+ownevents[own_evts[j]].id+'_own_sidebar').css('color','red');
+                } 
+            }
+        }
+        //update postdata
         setLink();
     }
 
+    // if from<val<to -> true, else false 
     function between(val,from,to)
     {
     	if(val >= from && val < to){return true;} 
     	return false;
     }
 
-    
+    //create new own event
+    //add form to create new event
     $('#add_event_btn').click(function(){
         $('#add_event_container').empty();
         var day ="<select id='add_own_day'> <option value='0'>Mo</option> <option value='1'>Di</option> <option value='2'>Mi</option> <option value='3'>Do</option> <option value='4'>Fr</option> <option value='5'>Sa</option> <option value='6'>So</option></select>";
@@ -430,7 +455,7 @@
         var tohour ="<select id='add_own_endh'> "+h+" </select>";
         var tomin ="<select id='add_own_endm'> "+m+" </select>";
 
-        $('#add_event_container').append( "<div id='owne' class='container' style='border:solid 1px black;padding:25px;'></div>" );
+        $('#add_event_container').append( "<div id='owne' class='container ' style='padding:25px;'></div>" );
 
         $('#owne').append( "<span class='span2'>Name:</span> <input  id='add_own_name' type='text' value='Name'> <br/>" );
         $('#owne').append( "<span class='span2'>Day:</span>"+day+"<br/>" );
@@ -438,40 +463,54 @@
         $('#owne').append( "<span class='span2'>End</span>"+tohour+tomin+"<br/>" );
         $('#owne').append( "<input type='button' id='add_own_event' value='add'>" );
         
-
+        //add created own event to own table
         $('#add_own_event').click(function(){
 
             var begin=$('#add_own_beginh option:selected').text()+':'+$('#add_own_beginm option:selected').text();
             var end=$('#add_own_endh option:selected').text()+':'+$('#add_own_endm option:selected').text();
             var day=$('#add_own_day option:selected').text();
             var dayi=$('#add_own_day option:selected').val();
-            var id=10000-ownevents.length;
             var modul=$('#add_own_name').val();
             var eventid=ownevents.length;
 
-            
-            var post = '<tr class="offer_event" id="'+eventid+'">';
-            	post+='<td id="'+eventid+'_own_namefield" class="event_names" style="padding-left:25px;">';
-            		post+=modul;
-            	post+='</td>';
-            	post+='<td>' + day + ': ' + begin + '-' + end + '</td>';
-            post+='</tr>';
-            $('#own_events_table').append( post);
-            
-            
+            var row = $('<tr class="offer_event own_events_tr" id="'+eventid+'_own" value="'+eventid+'">');
+            row.append('<td id="'+eventid+'_own_namefield" class="event_names" style="padding-left:25px;">'+modul+'</td>');
+            row.append('<td>' + day + ': ' + begin + '-' + end + '</td>');
+            $('#own_events_table').append( row);
+
+			selected_own.add(eventid);
             $('#add_event_container').empty();
 
+            begin=addzero(begin);
+            end=addzero(end);
             
-            var e = new evt(begin,end,dayi,id,modul);
+            var e = new evt(begin,end,dayi,eventid,modul);
             ownevents[ownevents.length]=e;
 
             checkoverleap();
         });
     });
-
+	//storage for all created own events, if selected or not
     var ownevents =new Array();
     
-
+    //adds a zero,when hour <10 
+    //input "h:m"
+    function addzero(a)   {
+    	var aa = a.split(":");
+		if(aa[0]<10){a='0'+aa[0]+':'+aa[1];}
+		return a;
+    }
+   
+    //select/deselect own events
+    $('div#own_events_div > table ').delegate('tr.own_events_tr','click',function(){
+            	if(selected_own.contains($(this).attr('value'))){
+            		selected_own.remove($(this).attr('value'));	
+            	}
+            	else{
+            		selected_own.add($(this).attr('value'));	
+            	}
+            	checkoverleap();
+           });
     
 </script>
 {% endblock %}
