@@ -11,7 +11,7 @@ class Command(BaseCommand):
 		events = Event.objects.count()
 		ba = BAInfParser()
 		ba.fetch()
-		ma = AInfParser()
+		ma = MAInfParser()
 		ma.fetch()
 		moduls = Modul.objects.count() - moduls
 		events = Event.objects.count() - events
