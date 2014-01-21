@@ -280,9 +280,10 @@
         var own = '&own=';
 	
         for(var i=0;i<ownevents.length;i++){
-            own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+';';
+        	if(selected_own.contains(ownevents[i].id)){
+        		own+=ownevents[i].modul+','+ownevents[i].day+','+ownevents[i].begin+','+ownevents[i].end+';';	
+        	}
         }
-
         document.getElementById('link_timetable').href = site + '?events=' + selected_events.values() + own + hss;
     }
 
