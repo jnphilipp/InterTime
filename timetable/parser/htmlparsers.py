@@ -149,7 +149,7 @@ class HSS(BaseParser):
 
 							kurs, created = Sportkurs.objects.get_or_create(name=informationen.group(1))
 							if created or not kurs.description:
-								kurs.description = informationen.group(3)
+								kurs.description = re.sub(r'<[^>]+>', '', informationen.group(3))
 								kurs.instructor = instructor
 								kurs.save()
 
