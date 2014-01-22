@@ -74,3 +74,5 @@ thead tr{background-color:#8a8a8a;}
 	padding-right:5%;
 	padding-top:15px;
 }
+
+input[type=checkbox]{display:none;}
