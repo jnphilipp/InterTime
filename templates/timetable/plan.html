@@ -104,7 +104,9 @@
                                         <td>{{ modul.number }}</td>
                                         <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
                                         <td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
-                                        <td>{% if modul.description %}{{ modul.description }}{% endif %}</td>
+                                        <td>{% if modul.description %}
+                                        		{{ modul.description|slice:":50" }}<div style="display:none" id="{{ modul.number }}_desc">{{modul.description|slice:"50:" }}</div>
+                                        	{% endif %}</td>
                                     </tr>
                                     {% for event in modul|events:semester %}
                                         <tr class="offer_sem{{ semester.id }}_events modul_{{ modul.number }}_events offer offer_event" id="{{ modul.number }}_{{ event.id }}">
@@ -226,11 +228,13 @@
 		
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
+			$('#' + $(this).attr('id') + '_desc').css('display', 'inline');
             $(this).css("background-color","#FF8C00");
 		}
 		else {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'none');
-            $(this).css("background-color","white");   
+            $(this).css("background-color","white");  
+            $('#' + $(this).attr('id') + '_desc').css('display', 'none'); 
             var elements = document.getElementsByClassName( $(this).attr('id') );
             for (var i=0; i<elements.length; i++) {
                if( elements[i].checked == true){
