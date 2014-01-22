@@ -16,14 +16,15 @@ class BaseParser(object):
 		text = parser.unescape(html)
 		return text
 
-class IFIWS13(BaseParser):
+class IFITimetable(BaseParser):
 	weekdays =["montags","dienstags","mittwochs","donnerstags","freitags","samstags","sonntags"]
 
-	def fetch(self):
-		html = super(IFIWS13, self).fetch('http://www.informatik.uni-leipzig.de/ifi/studium/stundenplan/ws2013/w13stdgang.html')
+	def fetch(self, url, semester):
+		try:
+			html = super(IFITimetable, self).fetch(url)
+		except:
+			return
 		department, created = Department.objects.get_or_create(name='Institut für Informatik')
-		semester, created = Semester.objects.get_or_create(name='Wintersemester')
-
 
 		matchs = re.finditer(r'<!--###s_modul### begin -->(.+?)(?=<!--###s_modul### end -->)', html, flags=re.M|re.S)
 		for match in matchs:
@@ -59,12 +60,12 @@ class IFIWS13(BaseParser):
 				if not len(moduls) > 0:
 					continue
 
-				ms = re.finditer(r'<a href="studium/stundenplan/ws2013/w13dozent.html#.+?>(.+?),(.+?)</a>', header.group(1), flags=re.M|re.S)
+				ms = re.finditer(r'<a href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\ddozent.html#.+?>(.+?),(.+?)</a>', header.group(1), flags=re.M|re.S)
 				for m in ms:
 					instructor, created = Instructor.objects.get_or_create(firstname=m.group(2), lastname=m.group(1))
 					instructors.add(instructor)
 
-				m = re.search(r'href="studium/stundenplan/ws2013/w13stdgang.html#.+?">(.+?)</a>', header.group(1), flags=re.M|re.S)
+				m = re.search(r'href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\dstdgang.html#.+?">(.+?)</a>', header.group(1), flags=re.M|re.S)
 				if m:
 					field, created = FieldOfStudy.objects.get_or_create(name=m.group(1), department=department)
 
@@ -92,7 +93,7 @@ class IFIWS13(BaseParser):
 					mm = re.search(r'<td class="s_termin_bis">(\d\d?:\d\d)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
 						event_end = mm.group(1)
-					mm = re.search(r'<td class="s_termin_zeit">([^ <]+)\s?\(?([^<\)]+)?</td>', e.group(0), flags=re.M|re.S)
+					mm = re.search(r'<td class="s_termin_zeit">([^\s<]+)(\s+\([^<\)]+\))?</td>', e.group(0), flags=re.M|re.S)
 					if mm:
 						try:
 							event_weekday = self.weekdays.index(mm.group(1))
@@ -109,7 +110,7 @@ class IFIWS13(BaseParser):
 					event_instructors = set()
 					mm = re.search(r'<td class="s_termin_dozent">(.+?)</td>', e.group(0), flags=re.M|re.S)
 					if mm:
-						mms = re.finditer(r'<a href="studium/stundenplan/ws2013/w13dozent.html#[^>]+>([^,]+), ([^<]+)</a>', mm.group(1), flags=re.M|re.S)
+						mms = re.finditer(r'<a href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\ddozent.html#[^>]+>([^,]+), ([^<]+)</a>', mm.group(1), flags=re.M|re.S)
 						for mmm in mms:
 							event_instructor, created = Instructor.objects.get_or_create(firstname=mmm.group(2), lastname=mmm.group(1))
 							event_instructors.add(event_instructor)
@@ -126,12 +127,12 @@ class IFIWS13(BaseParser):
 
 #Hochschulsport
 class HSS(BaseParser):
-	def fetch(self):
+	def fetch(self, url):
 		abc = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 		weekdays =["mo","di","mi","do","fr","sa","so"]
 
 		i = 0
-		html = super(HSS, self).fetch('http://hochschulsport.uni-leipzig.de/angebote/aktueller_zeitraum/index.html')
+		html = super(HSS, self).fetch(url)
 		for i in abc:
 			inhalt = re.finditer(r'<!-- BEGINN_INHALT_ZFH -->(.+?)(?=<!-- ENDE_INHALT_ZFH -->)', html, flags=re.M|re.S)
 			for index in inhalt:
@@ -167,4 +168,4 @@ class HSS(BaseParser):
 
 									weekday = weekdays.index(str.lower(str(wd)))
 									spevent, created = SportkursEvent.objects.get_or_create(kurs=kurs, details=event.group(1), weekday=weekday, begin=event.group(3), end=event.group(4), location=location)
-									print event.group(6) #Zeitraum
+									#print event.group(6) #Zeitraum

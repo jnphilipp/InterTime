@@ -5,10 +5,10 @@ from timetable.models import Department, Event, EventType, FieldOfStudy, Instruc
 import os, sys, re
 
 class BAInfParser():
-	def fetch(self):
+	def fetch(self, url):
 		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 
-		r = urlopen('http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ba-inf/ba-inf-module.html')
+		r = urlopen(url)
 		with open('/tmp/ba-inf.pdf', 'w') as f:
 			f.write(r.read())
 		os.system('pdf2txt.py -o /tmp/a.out /tmp/ba-inf.pdf');
@@ -122,10 +122,10 @@ class BAInfParser():
 
 
 class MAInfParser():
-	def fetch(self):
+	def fetch(self, url):
 		department, created = Department.objects.get_or_create(name='Institut für Informatik')
 
-		r = urlopen('http://www.informatik.uni-leipzig.de/ifi/studium/studiengnge/ma-inf/ma-inf-module.html')
+		r = urlopen(url)
 		with open('/tmp/ma-inf.pdf', 'w') as f:
 			f.write(r.read())
 
