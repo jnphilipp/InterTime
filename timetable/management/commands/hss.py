@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from timetable.models import Sportkurs, SportkursEvent
-from timetable.parser.htmlparsers import HSS
+from timetable.models import Parser, Source, Sportkurs, SportkursEvent
+from timetable.parser import process
 
 class Command(BaseCommand):
 	args = ''
@@ -9,8 +9,11 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		kurse = Sportkurs.objects.count()
 		events = SportkursEvent.objects.count()
-		hss = HSS()
-		hss.fetch()
+
+		parser = Parser.objects.get(name='hss')
+		for source in Source.objects.filter(parser=parser):
+			process.process_source_hss(source)
+
 		kurse = Sportkurs.objects.count() - kurse
 		events = SportkursEvent.objects.count() - events
 		self.stdout.write('Added ' + str(kurse) + ' Kurse')

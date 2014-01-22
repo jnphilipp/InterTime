@@ -22,5 +22,5 @@ class Command(BaseCommand):
 
 		self.stdout.write('Added ' + str(kurse) + ' Kurse.')
 		self.stdout.write('Added ' + str(sevents) + ' Sporkurs events.')
-		self.stdout.write('Added ' + str(kurse) + ' Module.')
+		self.stdout.write('Added ' + str(modul) + ' Module.')
 		self.stdout.write('Added ' + str(events) + ' Events.')

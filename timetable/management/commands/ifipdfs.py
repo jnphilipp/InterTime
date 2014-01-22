@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from timetable.models import Event, Modul
-from timetable.parser.pdfparsers import BAInfParser, MAInfParser
+from timetable.models import Event, Modul, Parser, Source
+from timetable.parser import process
 
 class Command(BaseCommand):
 	args = ''
@@ -9,10 +9,11 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		moduls = Modul.objects.count()
 		events = Event.objects.count()
-		ba = BAInfParser()
-		ba.fetch()
-		ma = MAInfParser()
-		ma.fetch()
+
+		parser = Parser.objects.get(name='ifipdfs')
+		for source in Source.objects.filter(parser=parser):
+			process.process_source_ifipdfs(source)
+
 		moduls = Modul.objects.count() - moduls
 		events = Event.objects.count() - events
 		self.stdout.write('Added ' + str(moduls) + ' Module')
