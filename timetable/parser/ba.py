@@ -114,7 +114,7 @@ class PdfparserBA():
 
 				type, created = ModulType.objects.get_or_create(name=modultype)
 
-				modul, created = Modul.objects.get_or_create(number=number)	
+				modul, created = Modul.objects.get_or_create(number=number.strip())	
 				#if created:
 				modul.name = title.strip()
 				modul.lp=int(lp)
