@@ -1,17 +1,19 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-class Source(models.Model):
-	url = models.CharField(max_length=1024, blank=True, null=True)
-	regex = models.CharField(max_length=1024, blank=True, null=True)
+class Parser(models.Model):
+	name = models.CharField(max_length=1024, unique=True)
 
 	def __unicode__(self):
-		if self.url:
-			return self.url 
-		elif self.regex:
-			return self.regex
-		else:
-			return self.id
+		return self.name
+
+class Source(models.Model):
+	source = models.CharField(max_length=1024, unique=True)
+	regex = models.BooleanField()
+	parser = models.ForeignKey(Parser)
+
+	def __unicode__(self):
+		return self.source
 
 class ModulType(models.Model):
 	name = models.CharField(max_length=1024, unique=True)
