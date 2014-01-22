@@ -28,7 +28,7 @@ def process_source_ifitimetable(source):
 				elif '/ws' in url:
 					semester = ws
 				ifi = IFITimetable()
-				ifi.fetch(url, ws)
+				ifi.fetch(url, semester)
 		else:
 			if '/ss' in source.source:
 				semester = ss

@@ -62,12 +62,12 @@ class IFITimetable(BaseParser):
 
 				ms = re.finditer(r'<a href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\ddozent.html#.+?>(.+?),(.+?)</a>', header.group(1), flags=re.M|re.S)
 				for m in ms:
-					instructor, created = Instructor.objects.get_or_create(firstname=m.group(2), lastname=m.group(1))
+					instructor, created = Instructor.objects.get_or_create(firstname=m.group(3), lastname=m.group(4))
 					instructors.add(instructor)
 
 				m = re.search(r'href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\dstdgang.html#.+?">(.+?)</a>', header.group(1), flags=re.M|re.S)
 				if m:
-					field, created = FieldOfStudy.objects.get_or_create(name=m.group(1), department=department)
+					field, created = FieldOfStudy.objects.get_or_create(name=m.group(3), department=department)
 
 				m = re.search(r'<td nowrap="nowrap">(\d+?). Sem.</td>', header.group(1), flags=re.M|re.S)
 				if m:
@@ -112,7 +112,7 @@ class IFITimetable(BaseParser):
 					if mm:
 						mms = re.finditer(r'<a href="stundenplaene/(ws|ss)\d{4}/(w|s)\d\ddozent.html#[^>]+>([^,]+), ([^<]+)</a>', mm.group(1), flags=re.M|re.S)
 						for mmm in mms:
-							event_instructor, created = Instructor.objects.get_or_create(firstname=mmm.group(2), lastname=mmm.group(1))
+							event_instructor, created = Instructor.objects.get_or_create(firstname=mmm.group(4), lastname=mmm.group(3))
 							event_instructors.add(event_instructor)
 
 					for modul in moduls:
