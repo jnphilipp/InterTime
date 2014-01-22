@@ -3,18 +3,14 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.forms import TextInput
 from django.db import models
-from timetable.models import Department, Event, EventType, FieldOfStudy, Location, Instructor, Modul, ModulType, ModulFieldOfStudy, Selection, Semester, Source, Student
+from timetable.models import Department, Event, EventType, FieldOfStudy, Location, Instructor, Modul, ModulType, ModulFieldOfStudy, Parser, Selection, Semester, Source, Student
 
 class SourceAdmin(admin.ModelAdmin):
-	list_display = ('url', 'regex')
+	list_display = ('source', 'regex', 'parser')
 
 	formfield_overrides = {
 		models.CharField: {'widget': TextInput(attrs={'autocomplete':'off'})},
 	}
-
-	fieldsets = [
-		('URL', {'fields': ['url', 'regex']}),
-	]
 
 class ModulTypeAdmin(admin.ModelAdmin):
 	list_display = ('name',)
@@ -152,6 +148,7 @@ admin.site.register(Instructor, InstructorAdmin)
 admin.site.register(Modul, ModulAdmin)
 admin.site.register(ModulFieldOfStudy)
 admin.site.register(ModulType, ModulTypeAdmin)
+admin.site.register(Parser)
 admin.site.register(Selection, SelectionAdmin)
 admin.site.register(Semester, SemesterAdmin)
 admin.site.register(Source, SourceAdmin)
