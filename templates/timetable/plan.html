@@ -99,18 +99,18 @@
                         <tbody id="offer_body">
                             {% for semester in semesters %}
                                 {% for modul in semester|module %}
-                                    <tr class="hoover offer_sem{{ semester.id }} offer offer_modul" id="{{ modul.number }}" >
+                                    <tr class="hoover offer_sem{{ semester.id }} offer offer_modul" id="{{ semester.id }}_{{ modul.number }}" >
                                         <td>{{ modul.name }}</td>
                                         <td>{{ modul.number }}</td>
                                         <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
                                         <td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
                                         <td>{% if modul.description %}
-                                        		{{ modul.description|slice:":50" }}<div style="display:none" id="{{ modul.number }}_desc">{{modul.description|slice:"50:" }}</div>
+                                        		{{ modul.description|slice:":50" }}<div style="display:none" id="{{ semester.id }}_{{ modul.number }}_desc">{{modul.description|slice:"50:" }}</div>
                                         	{% endif %}</td>
                                     </tr>
                                     {% for event in modul|events:semester %}
-                                        <tr class="offer_sem{{ semester.id }}_events modul_{{ modul.number }}_events offer offer_event" id="{{ modul.number }}_{{ event.id }}">
-                                            <td id="{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+                                        <tr class="offer_sem{{ semester.id }}_events modul_{{ semester.id }}_{{ modul.number }}_events offer offer_event" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}">
+                                            <td id="{{ semester.id }}_{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ semester.id }}_{{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
                                             <td>{{ event.eventtype }}</td>
                                             <td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
                                             <td colspan="2">{{ event.begin }} - {{ event.end }}</td>
@@ -120,6 +120,7 @@
                                             <input type="hidden" id="{{ event.id }}_eventname" value="{{ event.name }}" >
                                             <input type="hidden" id="{{ event.id }}_modulnumber" value="{{ modul.number }}" >
                                             <input type="hidden" id="{{ event.id }}_weekday" value="{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}" >
+                                            <input type="hidden" id="{{ event.id }}_semid" value="{{ semester.id }}" >
                                         </tr>
                                     {% endfor %}
                                 {% endfor %}
@@ -221,11 +222,12 @@
             $("#content_module_div").hide();
         }
         $("#content_module_div").show();
+        checkoverleap();
 	});
 
     // show/hide event for this module
     $('div#content_module_div > table').delegate('tr.offer_modul','click',function(){ 
-		
+
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
 			$('#' + $(this).attr('id') + '_desc').css('display', 'inline');
@@ -292,12 +294,13 @@
     }
 
 
-    function evt(begin,end,day,id,modul){
+    function evt(begin,end,day,id,modul,semid){
         this.begin=begin;
         this.end=end;
         this.day=day;
         this.id=id;
         this.modul=modul;
+        this.semid=semid
     }
 
     //checking und styling overleap for selected events
@@ -317,10 +320,11 @@
             var modul= document.getElementById(evts[i]+'_modulnumber').value;
             var weekday = document.getElementById(evts[i]+'_weekday').value;
             var eventname = document.getElementById(evts[i]+'_eventname').value;
+            var semid = document.getElementById(evts[i]+'_semid').value;
             $('#sidebar_selected').append('<li id="'+evts[i]+'_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
-            var e = new evt(begin,end,day,evts[i],modul);
+            var e = new evt(begin,end,day,evts[i],modul,semid);
             events[i]=e;
-            $('#'+evts[i]+'_namefield').css('color','green');
+            $('#'+semid+'_'+evts[i]+'_namefield').css('color','green');
             $('#'+evts[i]+'_sidebar').css('color','green');
             
         }
@@ -336,7 +340,7 @@
             var weekday = document.getElementById(hss_evts[i]+'_hss_weekday').value;
             var eventname = document.getElementById(hss_evts[i]+'_hss_name').value;
             $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_hss_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
-            var e = new evt(begin,end,day,evts[i],modul);
+            var e = new evt(begin,end,day,evts[i],modul,0);
             hss_events[i]=e;
             
             $('#'+hss_evts[i]+'_hss_namefield').css('color','green');
@@ -358,8 +362,8 @@
                 if(events[i].day != events[j].day || events[i].day == 'None'){continue;}
 
                 if( between(events[i].begin, events[j].begin,events[j].end) || between(events[j].begin, events[i].begin,events[i].end)){
-                    $('#'+evts[i]+'_namefield').css('color','red');
-                    $('#'+evts[j]+'_namefield').css('color','red');
+                    $('#'+events[i].semid+'_'+evts[i]+'_namefield').css('color','red');
+                    $('#'+events[j].semid+'_'+evts[j]+'_namefield').css('color','red');
                     $('#'+evts[i]+'_sidebar').css('color','red');
                     $('#'+evts[j]+'_sidebar').css('color','red');
                 } 
@@ -401,7 +405,7 @@
                 if(events[i].day != hss_events[j].day){continue;}
 
                 if( between(hss_events[j].begin,events[i].begin,events[i].end) || between(events[i].begin,hss_events[j].begin,hss_events[j].end) ){
-                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+events[i].semid+'_'+evts[i]+'_namefield').css('color','red');
                     $('#'+hss_evts[j]+'_hss_namefield').css('color','red');
                     $('#'+evts[i]+'_sidebar').css('color','red');
                     $('#'+hss_evts[j]+'_hss_sidebar').css('color','red');
@@ -414,7 +418,7 @@
             	if(events[i].day != ownevents[own_evts[j]].day){continue;}
 
                 if( between(ownevents[own_evts[j]].begin,events[i].begin,events[i].end) || between(events[i].begin,ownevents[own_evts[j]].begin,ownevents[own_evts[j]].end) ){
-                    $('#'+evts[i]+'_namefield').css('color','red');
+                    $('#'+events[i].semid+'_'+evts[i]+'_namefield').css('color','red');
                     $('#'+ownevents[own_evts[j]].id+'_own_namefield').css('color','red');
                     $('#'+evts[i]+'_sidebar').css('color','red');
                     $('#'+ownevents[own_evts[j]].id+'_own_sidebar').css('color','red');
@@ -489,7 +493,7 @@
             begin=addzero(begin);
             end=addzero(end);
             
-            var e = new evt(begin,end,dayi,eventid,modul);
+            var e = new evt(begin,end,dayi,eventid,modul,0);
             ownevents[ownevents.length]=e;
 
             checkoverleap();
