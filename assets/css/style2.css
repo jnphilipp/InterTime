@@ -50,8 +50,9 @@ th,td {
 .rowh{border:solid 1px black;}
 .modcell{font-size: 10px;}
 .content_div{
-	margin:10px;
-	padding:15px;
+	margin:5px;
+	padding:5px;
+	padding-left:8px;
 	border: solid 1px black;
 	border-radius: 15px;
 	background-color:whitesmoke;
