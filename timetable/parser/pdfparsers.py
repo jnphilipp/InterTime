@@ -22,6 +22,7 @@ class BAInfParser():
 		index=1
 		flag=0
 		flagInhalt=0
+		flagInhaltException=0
 
 		liste = []
 		liste2 = []
@@ -50,12 +51,21 @@ class BAInfParser():
 			#modultitel bachelor
 
 			#inhalt
-			if line.strip() == 'Teilnahmevoraus-': flagInhalt=0
+			if line.strip() == 'Teilnahmevoraus-': 
+				flagInhalt=0
+				if inhalt.strip()=='': 
+					#print 'fehler'+number
+					flagInhaltException=1
+					 #inhalt steht dann zwischen 'Literaturangabe' und 'keine'       
+
 			if flagInhalt==1: inhalt += line
 			if line.strip() =='Inhalt': flagInhalt=1
 
 
-			#???if counter==20: print line	#institut
+			#inhalt Ausnahmebehandlung
+			if line.strip() == 'keine': flagInhaltException=0
+			if flagInhaltException==2: inhalt += line
+			if line.strip() =='Literaturangabe' and flagInhaltException==1: flagInhaltException=2
 
 			letzteZeile=line
 
@@ -78,10 +88,8 @@ class BAInfParser():
 			if 'Modulnummer' in line:
 				flag+=1
 
-				#if index != flag: print title+ str(index) + ' '+str(flag)
-				#print lp
-		
-				#print inhalt
+				if title.strip()=='Wahrscheinlichkeitstheorie':
+					inhalt='Einführung in die Denkweisen und Beweismethoden der W\'theorie, Erschließung wichtiger Einsatz- und Anwendungsgebiete der Mathematik diskrete Wahrscheinlichkeitsräume und Wahrscheinlichkeiten mit Dichten: grundlegende Konzepte (Erwartungswert, Varianz, Unabhängigkeit, Zufallsgrößen), Beispiele für Verteilungen, Gesetz der Großen Zahlen, Satz von Moivre-Laplace, einführende Betrachtungen der mathematischen Statistik (Schätztheorie, Konfidenzbereiche, Testtheorie)'
 
 				counter=0
 				liste2=liste
@@ -93,9 +101,7 @@ class BAInfParser():
 					#print titles[counter2-1]+numbers[counter2-1]
 				counter2+=1
 
-
 				type, created = ModulType.objects.get_or_create(name=modultype)
-
 				modul, created = Modul.objects.get_or_create(number=number.strip())
 				if created or not modul.name:
 					modul.name = title.strip()
