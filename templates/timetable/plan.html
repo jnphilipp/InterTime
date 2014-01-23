@@ -102,9 +102,11 @@
                                         <td>{{ modul.number }}</td>
                                         <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
                                         <td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
-                                        <td>{% if modul.description %}
-                                        		{{ modul.description|slice:":50" }}<div style="display:none" id="{{ semester.id }}_{{ modul.number }}_desc">{{modul.description|slice:"50:" }}</div>
-                                        	{% endif %}</td>
+                                        <td title="{% if modul.description %}{{ modul.description }}{% endif %}">
+                                        	{% if modul.description %}
+                                        		{{ modul.description|slice:":60" }}..
+                                        	{% endif %}
+                                        </td>
                                     </tr>
                                     {% for event in modul|events:semester %}
                                         <tr class="offer_sem{{ semester.id }}_events modul_{{ semester.id }}_{{ modul.number }}_events offer offer_event" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}">
@@ -150,7 +152,7 @@
 			                                <td>{{ event.weekday|convert_weekday }}</td>
 			                                <td>{{ event.begin}}</td>
 			                                <td>{{ event.end}}</td>
-			                                <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
+			                                <td title="{% if kurs.description %}{{ kurs.description }}{% endif %}">{% if kurs.description %}{{ kurs.description|slice:":80" }}..{% endif %}</td>
 											<input type="hidden" id="{{ event.id }}_hss_begin" value="{{ event.begin }}" >
 			                                <input type="hidden" id="{{ event.id }}_hss_end" value="{{ event.end }}" >
 			                                <input type="hidden" id="{{ event.id }}_hss_day" value="{{ event.weekday }}" >
@@ -228,13 +230,11 @@
 
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
-			$('#' + $(this).attr('id') + '_desc').css('display', 'inline');
-            $(this).css("background-color","#FFEC8B");
+            $(this).css("background-color","#ecda4B");
 		}
 		else {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'none');
             $(this).css("background-color","white");  
-            $('#' + $(this).attr('id') + '_desc').css('display', 'none'); 
             var elements = document.getElementsByClassName( $(this).attr('id') );
             for (var i=0; i<elements.length; i++) {
                if( elements[i].checked == true){

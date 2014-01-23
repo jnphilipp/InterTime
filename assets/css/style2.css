@@ -9,20 +9,38 @@ tr.offer_modul {
 	border:1px solid black;
 }
 
+tr.hoover{border-top:solid 1px black;}
+
+
+
 tr.hoover:hover td{
-	background-color: #FFEC8B;
+	background-color: #cccccc;
 	cursor:pointer;
 }
+
+
 tr.offer_event:hover{
 	cursor:pointer;
+	border-top:1px solid black;
+	border-bottom:1px solid black;
 }
-tr.offer_event td{
+tr.offer_modul td{
 	background-color: #e0e0e0;
 	
 }
+tr.sport td{
+	background-color: #e0e0e0;
+	
+}
+
+tr.event td{
+	background-color: #a0a0a0;
+	
+}
+
 th,td {
-	padding-left: 10px;
-	padding-right: 10px;}
+	margin-left: 10px;
+	margin-right: 10px;}
 
 .offer{display:none;}
 .offer_events{display:none;
