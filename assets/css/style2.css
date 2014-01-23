@@ -1,0 +1,72 @@
+
+a{color:#dbb520;}
+a:hover{color:whitesmoke;}
+table{border:solid 1px black;}
+
+tr{border:solid 1px black;}
+td{border-top:solid 1px black;}
+tr.offer_modul {
+	border:1px solid black;
+}
+
+tr.hoover:hover td{
+	background-color: #FFEC8B;
+	cursor:pointer;
+}
+tr.offer_event:hover{
+	cursor:pointer;
+}
+tr.offer_event td{
+	background-color: #e0e0e0;
+	
+}
+th,td {
+	padding-left: 10px;
+	padding-right: 10px;}
+
+.offer{display:none;}
+.offer_events{display:none;
+	color:green;}
+
+.table-day{display:table-row;}
+.rowh{border:solid 1px black;}
+.modcell{font-size: 10px;}
+.content_div{
+	margin:10px;
+	padding:15px;
+	border: solid 1px black;
+	border-radius: 15px;
+	background-color:whitesmoke;
+}
+thead tr{background-color:#8a8a8a;}
+.content_elements{
+	border-bottom:solid 1px black;
+	cursor:pointer;
+
+}
+.content_elements_div{
+	padding-left:5%;
+	padding-right:5%;
+	padding-top:15px;
+}
+
+input[type=checkbox]{display:none;}
+div#plan{
+	background-color:rgb(225,225,215);
+	min-height:1000px;
+
+}
+
+.content_div h3:hover{
+	color:#555;
+}
+
+a.sidebar_link{
+	color:#8b5a00;
+}
+
+#owne{
+	margin-top:30px;
+	border: dotted grey 1px;
+}
+#add_event_btn{margin-top: 25px;}

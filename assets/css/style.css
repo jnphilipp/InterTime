@@ -4,8 +4,8 @@ body {
 	font-size: 10pt;
 	font-weight: normal;
 	color: black;
-	padding-top:40px;
-	padding-bottom:40px;
+	margin-top:40px;
+	margin-bottom:40px;
 }
 
 a {
@@ -25,54 +25,3 @@ a:active {
 	right: -1px;}
 
 
-table{border:solid 1px black;}
-
-tr.offer_modul {
-	border:1px solid black;
-}
-tr.offer_modul td{
-	padding-top:3px;
-	padding-bottom:3px;
-}
-tr.hoover:hover td{
-	background-color: #FFEC8B;
-	cursor:pointer;
-}
-tr.offer_event:hover{
-	cursor:pointer;
-}
-tr.offer_event td{
-	background-color: #e0e0e0;
-	
-}
-th,td {
-	padding-left: 10px;
-	padding-right: 10px;}
-
-.offer{display:none;}
-.offer_events{display:none;
-	color:green;}
-
-.table-day{display:table-row;}
-.rowh{border:solid 1px black;}
-.modcell{font-size: 10px;}
-.content_div{
-	margin:10px;
-	padding:15px;
-	border: solid 1px black;
-	border-radius: 15px;
-	background-color:whitesmoke;
-}
-thead tr{background-color:#8a8a8a;}
-.content_elements{
-	border-bottom:solid 1px black;
-	cursor:pointer;
-
-}
-.content_elements_div{
-	padding-left:5%;
-	padding-right:5%;
-	padding-top:15px;
-}
-
-input[type=checkbox]{display:none;}
