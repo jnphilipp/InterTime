@@ -40,14 +40,12 @@
 </script>
 <div id="sidebar" style="position:fixed;">
     <div style="background-color:whitesmoke;padding-bottom:100px;padding-top:20px;">
-        <div id="sidebar_title"  style="margin-bottom:30px;">
-            <p><h1 style="text-align: center;">Semesterplan</h1></p>
-        </div>
+        
 
 
-        <div id="sidebar_content" style="padding-left:5%;padding-right:5%;">
+        <div id="sidebar_content" style="padding-left:3%;padding-right:3%;">
             <div class="">
-                <div id="sidebar_select" class="" style="margin-left:5%;margin-right:5%;">
+                <div id="sidebar_select" class="" style="margin-left:3%;margin-right:3%;">
                     <p>
                         <h4>select semester:</h4>
                         <select id="select_semester">
@@ -61,8 +59,8 @@
             </div>
         </div>
 
-        <div id="plan_top_displaytt"  style="margin:10px;margin-top:25px;">
-            <p><a id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
+        <div id="plan_top_displaytt"  style="margin-left:5%;margin-right:5%;margin-top:25px;">
+            <p><a class="sidebar_link"id="link_timetable" href="{% url 'timetable' %}">display timetable</a></p>
         </div>
 
         <div style="border:solid 1px black;border-radius:5px;padding:5px;margin-left:5%;margin-right:5%;">
@@ -81,12 +79,12 @@
 <div id="plan">
     <div id="plan_bottom" class="plan" style="padding-top:60px;padding-left:250px;">
 
-        <div id="content" style="padding-left:5%;padding-right:5%;">
+        <div id="content" style="padding-left:2%;padding-right:2%;">
             <div id="content_moduls" class="content_div">
-                <h3><p class="content_elements" id="content_module">Module: </p></h3>
+                <h3><p class="content_elements" id="content_module">module: </p></h3>
                 <div class="content_elements_div" id="content_module_div">
 
-                    <table rules ="rows" id="offering" style="width:90%;">
+                    <table rules ="rows" id="offering" style="width:97%;">
                         <thead>
                             <tr>
                                 <th >name</th>
@@ -104,16 +102,18 @@
                                         <td>{{ modul.number }}</td>
                                         <td>{% if modul.lp %}{{ modul.lp }}{% endif %}</td>
                                         <td>{% if modul.modultype %}{{ modul.modultype }}{% endif %}</td>
-                                        <td>{% if modul.description %}
-                                        		{{ modul.description|slice:":50" }}<div style="display:none" id="{{ semester.id }}_{{ modul.number }}_desc">{{modul.description|slice:"50:" }}</div>
-                                        	{% endif %}</td>
+                                        <td title="{% if modul.description %}{{ modul.description }}{% endif %}">
+                                        	{% if modul.description %}
+                                        		{{ modul.description|slice:":40" }}..
+                                        	{% endif %}
+                                        </td>
                                     </tr>
                                     {% for event in modul|events:semester %}
                                         <tr class="offer_sem{{ semester.id }}_events modul_{{ semester.id }}_{{ modul.number }}_events offer offer_event" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}">
-                                            <td id="{{ semester.id }}_{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ semester.id }}_{{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
-                                            <td>{{ event.eventtype }}</td>
-                                            <td>{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}</td>
-                                            <td colspan="2">{{ event.begin }} - {{ event.end }}</td>
+                                            <td colspan="2" id="{{ semester.id }}_{{ event.id }}_namefield" class="event_names" style="padding-left:25px;"><input type="checkbox" id="{{ semester.id }}_{{ modul.number }}_{{ event.id }}_checkbox" class="event_checkbox {{ semester.id }}_{{ modul.number }}" name="event" value="{{ event.id }}"> {{ event.name }}</td>
+                                            <td colspan="2">{{ event.eventtype }}</td>
+                                            <td >{{ event.weekday|convert_weekday }}{% if event.weeknumber %} {{ event.weeknumber }}{% endif %}
+                                            {{ event.begin }} - {{ event.end }}</td>
                                             <input type="hidden" id="{{ event.id }}_begin" value="{{ event.begin }}" >
                                             <input type="hidden" id="{{ event.id }}_end" value="{{ event.end }}" >
                                             <input type="hidden" id="{{ event.id }}_day" value="{{ event.weekday }}" >
@@ -152,7 +152,7 @@
 			                                <td>{{ event.weekday|convert_weekday }}</td>
 			                                <td>{{ event.begin}}</td>
 			                                <td>{{ event.end}}</td>
-			                                <td>{% if kurs.description %}{{ kurs.description }}{% endif %}</td>
+			                                <td style="padding-left:9px;" title="{% if kurs.description %}{{ kurs.description }}{% endif %}">{% if kurs.description %}{{ kurs.description|slice:":70" }}..{% endif %}</td>
 											<input type="hidden" id="{{ event.id }}_hss_begin" value="{{ event.begin }}" >
 			                                <input type="hidden" id="{{ event.id }}_hss_end" value="{{ event.end }}" >
 			                                <input type="hidden" id="{{ event.id }}_hss_day" value="{{ event.weekday }}" >
@@ -167,7 +167,7 @@
                 </div>
             </div>
             <div id="content_own" class="content_div">
-                <h3><p class="content_elements" id="content_own">Own Events:</p></h3>
+                <h3><p class="content_elements" id="content_own">custom Events:</p></h3>
                 <div class="content_elements_div" id="content_own_div">
                     <div id="own_events_div">
                         <table>
@@ -230,13 +230,11 @@
 
         if ( $('.modul_' + $(this).attr('id') + '_events').css('display') == 'none' ) {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'table-row');
-			$('#' + $(this).attr('id') + '_desc').css('display', 'inline');
-            $(this).css("background-color","#FF8C00");
+            $(this).css("background-color","#ecda4B");
 		}
 		else {
 			$('.modul_' + $(this).attr('id') + '_events').css('display', 'none');
             $(this).css("background-color","white");  
-            $('#' + $(this).attr('id') + '_desc').css('display', 'none'); 
             var elements = document.getElementsByClassName( $(this).attr('id') );
             for (var i=0; i<elements.length; i++) {
                if( elements[i].checked == true){
@@ -321,7 +319,7 @@
             var weekday = document.getElementById(evts[i]+'_weekday').value;
             var eventname = document.getElementById(evts[i]+'_eventname').value;
             var semid = document.getElementById(evts[i]+'_semid').value;
-            $('#sidebar_selected').append('<li id="'+evts[i]+'_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
+            $('#sidebar_selected').append('<li id="'+evts[i]+'_sidebar">'+eventname.substring(0,35)+' <br>('+weekday.substring(0,2)+': '+begin+'-'+end+')</li>');   
             var e = new evt(begin,end,day,evts[i],modul,semid);
             events[i]=e;
             $('#'+semid+'_'+evts[i]+'_namefield').css('color','green');
@@ -339,7 +337,7 @@
             var modul= document.getElementById(hss_evts[i]+'_hss_name').value;
             var weekday = document.getElementById(hss_evts[i]+'_hss_weekday').value;
             var eventname = document.getElementById(hss_evts[i]+'_hss_name').value;
-            $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_hss_sidebar">'+eventname.substring(0,25)+'.. <br>('+weekday+': '+begin+'-'+end+')</li>');   
+            $('#sidebar_selected').append('<li id="'+hss_evts[i]+'_hss_sidebar">'+eventname.substring(0,35)+'<br>('+weekday.substring(0,2)+': '+begin+'-'+end+')</li>');   
             var e = new evt(begin,end,day,evts[i],modul,0);
             hss_events[i]=e;
             
@@ -350,7 +348,7 @@
         //own events
         var own_evts = selected_own.values();
         for(i=0;i<own_evts.length;i++){
-        	$('#sidebar_selected').append('<li id="'+ownevents[own_evts[i]].id+'_own_sidebar">'+ownevents[own_evts[i]].modul.substring(0,25)+'.. <br>('+ownevents[own_evts[i]].day+': '+ownevents[own_evts[i]].begin+'-'+ownevents[own_evts[i]].end+')</li>');   
+        	$('#sidebar_selected').append('<li id="'+ownevents[own_evts[i]].id+'_own_sidebar">'+ownevents[own_evts[i]].modul.substring(0,35)+' <br>('+ownevents[own_evts[i]].day.substring(0,2)+': '+ownevents[own_evts[i]].begin+'-'+ownevents[own_evts[i]].end+')</li>');   
         	$('#'+ownevents[own_evts[i]].id+'_own_namefield').css('color','green');
             $('#'+ownevents[own_evts[i]].id+'_own_sidebar').css('color','green');	
         }
@@ -464,7 +462,7 @@
         var tohour ="<select id='add_own_endh'> "+h+" </select>";
         var tomin ="<select id='add_own_endm'> "+m+" </select>";
 
-        $('#add_event_container').append( "<div id='owne' class='container ' style='padding:25px;'></div>" );
+        $('#add_event_container').append( "<div id='owne' class='container' style='padding:25px;'></div>" );
 
         $('#owne').append( "<span class='span2'>Name:</span> <input  id='add_own_name' type='text' value='Name'> <br/>" );
         $('#owne').append( "<span class='span2'>Day:</span>"+day+"<br/>" );
